@@ -1205,6 +1205,15 @@ body.dark #pmap .leaflet-tile-pane{filter:saturate(.85) brightness(.92)}
 .mp-steps{font-size:.86em;max-height:260px;overflow:auto;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
 .mp-steps ol{margin:0;padding-left:20px}.mp-steps li{margin:4px 0}
 
+
+/* ═══════ Install app ═══════ */
+.inst-btn{display:inline-flex;align-items:center;gap:6px}
+.inst-bar{position:fixed;left:50%;bottom:18px;transform:translate(-50%,140%);z-index:80;display:flex;align-items:center;gap:12px;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:18px;background:var(--surface);border:1px solid var(--accent);box-shadow:0 18px 40px -12px #000c;transition:transform .5s var(--ease)}
+.inst-bar.on{transform:translate(-50%,0)}
+.inst-bar img{width:46px;height:46px;border-radius:12px}
+.inst-bar .tx{flex:1;min-width:0;font-size:.9em;line-height:1.45}.inst-bar .tx b{display:block;font-size:1.05em}
+.inst-bar .x{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px}
+.inst-ios{margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:.92em;line-height:1.7}
 /* ═══════ Active menu item effects ═══════ */
 .menu .ind{background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 26%,transparent),color-mix(in srgb,var(--gold) 6%,transparent) 70%,transparent)!important;
   border:1px solid color-mix(in srgb,var(--gold-2) 28%,transparent);box-shadow:0 0 12px -5px color-mix(in srgb,var(--gold-2) 45%,transparent),inset 0 0 10px -7px color-mix(in srgb,var(--gold-hi) 60%,transparent);overflow:hidden}
@@ -1351,6 +1360,7 @@ body[data-theme]{transition:background-color .4s,color .4s}
   <header class="top">
     <button class="chip burger" onclick="document.body.classList.add('nav-open')" aria-label="මෙනුව"><svg class="ico"><use href="#i-menu"/></svg></button>
     <label class="searchbox"><svg class="ico"><use href="#i-search"/></svg><input id="q" placeholder="සොයන්න…" oninput="doSearch(this.value)"></label>
+    <button class="chip inst-btn" id="instTop" onclick="ddInstall()" title="යෙදුම ස්ථාපනය කරන්න" style="display:none">⬇<span class="label">ඇප් එක</span></button>
     <button class="chip thm-btn" onclick="go('themes')" title="තේමා · Themes" aria-label="තේමා"><svg class="ico"><use href="#i-palette"/></svg></button>
     <button class="chip" onclick="go('gallery')" title="ඡායාරූප"><svg class="ico"><use href="#i-image"/></svg><span class="label">ඡායාරූප</span></button>
   </header>
@@ -1787,6 +1797,7 @@ const TABS = [
   ["quiz","help","ප්‍රශ්න","ඔබේ දැනුම පරීක්ෂා කරන්න","තවත්","දෑගල්දොරුව ජාතක සිතුවම්"],
   ["fav","star","ප්‍රියතම","ඔබ සුරැකි කතා සහ ගාථා","තවත්","පිපුණු නෙළුම් මල"],
   ["themes","palette","තේමා · Themes","බෞද්ධ සංස්කෘතියෙන් උපන් සන්සුන් වර්ණ — තේමා 12ක්","තවත්","පිපුණු නෙළුම් මල"],
+  ["install","arrow","ඇප් එක ස්ථාපනය","ධර්ම දීපය ඔබේ දුරකථනයට එක් ක්ලික් එකකින්","තවත්","පිපුණු නෙළුම් මල"],
   ["translate","lang","පරිවර්තනය · Translate","මුළු යෙදුමම ඕනෑම භාෂාවකට පරිවර්තනය කරන්න","තවත්","පිපුණු නෙළුම් මල"]
 ];
 const T = id => TABS.find(t=>t[0]===id);
@@ -1913,6 +1924,11 @@ const V = {
     const rec=THEMES.filter(t=>t.rec), other=THEMES.filter(t=>!t.rec);
     return hero("themes")+`<div class="thm-sec">★ නිර්දේශිත බෞද්ධ තේමා <small>Recommended · ${rec.length}</small></div><div class="thm-grid">${rec.map(card).join("")}</div>
       <div class="thm-sec">අනෙකුත් තේමා <small>More · ${other.length}</small></div><div class="thm-grid">${other.map(card).join("")}</div>`; },
+  install(){ return hero("install")+`<div class="card" style="max-width:760px;margin-top:22px">
+     <h3 style="margin-top:0">📱 Android (Chrome)</h3><p class="meaning">ඉහළ ඇති <b>⬇ ඇප් එක</b> බොත්තම හෝ පහළ <b>ස්ථාපනය</b> බොත්තම ඔබන්න → <b>Install</b>. බොත්තම නොපෙනේ නම්: Chrome මෙනුව <b>⋮</b> → <b>Install app / Add to Home screen</b>.</p>
+     <h3>🍎 iPhone / iPad (Safari)</h3><div class="inst-ios">1. පහළ ඇති <b>Share</b> බොත්තම (⬆️ කොටුව) ඔබන්න<br>2. <b>Add to Home Screen</b> තෝරන්න<br>3. <b>Add</b> ඔබන්න — ධර්ම දීපය අයිකනය ඔබේ තිරයට එයි.</div>
+     <h3>💻 පරිගණකය (Chrome / Edge)</h3><p class="meaning">ලිපින තීරුවේ දකුණු පස ඇති <b>⊕ Install</b> අයිකනය ඔබන්න.</p>
+     <p class="meaning">ස්ථාපනය කළ පසු ඇප් එක ඔබේ දුරකථනයේ අනෙක් ඇප් මෙන් විවෘත වේ. කතා, ගාථා සහ පිරිත් පාඨ ඉන්ටර්නෙට් නැතිවත් කියවිය හැක.</p></div>`; },
   translate(){ const cur=trCur();
     return hero("translate")+`<div class="card tr-card notranslate" translate="no" style="max-width:860px;margin-top:22px">
      <p class="meaning" style="margin-top:0">භාෂාවක් තෝරන්න — මුළු යෙදුමම (මෙනු, කතා, ගාථා තේරුම්) එම භාෂාවට පරිවර්තනය වේ. Choose a language — the whole app will be translated.</p>
@@ -2676,6 +2692,21 @@ function setLang(c){
 function trFilter(q){ q=q.toLowerCase().trim(); document.querySelectorAll(".tr-l").forEach(b=>b.style.display=!q||b.dataset.s.includes(q)?"":"none"); }
 function gteInit(){ new google.translate.TranslateElement({pageLanguage:"si",autoDisplay:false},"gte"); }
 (function(){ trLabel(); const sc=document.createElement("script"); sc.src="https://translate.google.com/translate_a/element.js?cb=gteInit"; sc.async=true; document.body.appendChild(sc); })();
+</script>
+<div class="inst-bar" id="instBar"><img src="brand/logo-192.png" alt=""><div class="tx"><b>ධර්ම දීපය ඇප් එක</b>එක් ක්ලික් එකකින් ඔබේ දුරකථනයට ස්ථාපනය කරන්න — ඉන්ටර්නෙට් නැතිවත් විවෘත වේ.</div><button class="btn" onclick="ddInstall()">⬇ ස්ථාපනය</button><button class="x" onclick="ddInstHide(1)" aria-label="වසන්න">×</button></div>
+<script>
+let ddPrompt=null;
+const ddIOS=/iphone|ipad|ipod/i.test(navigator.userAgent), ddStandalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+function ddInstShow(){ if(ddStandalone) return; const t=document.getElementById("instTop"); if(t) t.style.display="";
+  if(localStorage.getItem("dd_inst_hide")!=="1") setTimeout(()=>document.getElementById("instBar").classList.add("on"),2500); }
+function ddInstHide(save){ document.getElementById("instBar").classList.remove("on"); if(save) localStorage.setItem("dd_inst_hide","1"); }
+addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); ddPrompt=e; ddInstShow(); });
+addEventListener("appinstalled",()=>{ ddInstHide(1); const t=document.getElementById("instTop"); if(t) t.style.display="none"; (window.toast||alert)("✅ ධර්ම දීපය ඇප් එක ස්ථාපනය විය!"); });
+if(ddIOS && !ddStandalone) ddInstShow();
+async function ddInstall(){
+  if(ddPrompt){ ddPrompt.prompt(); const r=await ddPrompt.userChoice; ddPrompt=null; if(r.outcome==="accepted") ddInstHide(1); return; }
+  go("install"); ddInstHide(); }
 </script>
 </body>
 </html>
