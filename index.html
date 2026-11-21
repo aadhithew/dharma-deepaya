@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" id="vp" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var w=Math.min(screen.width,screen.height);if(w<820){document.getElementById("vp").setAttribute("content","width=900, viewport-fit=cover");document.documentElement.classList.add("pcview");}})();</script>
+<script>(function(){var w=Math.min(screen.width,screen.height);if(w<820){document.getElementById("vp").setAttribute("content","width=780, viewport-fit=cover");document.documentElement.classList.add("pcview");}})();</script>
 <meta name="theme-color" content="#d0690b">
 <link rel="icon" href="brand/mark-64.png" type="image/png">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -1456,6 +1456,10 @@ html.pcview .leaflet-control-zoom{display:none!important}
 html.pcview body.inst-on main,html.pcview body.inst-on footer{padding-bottom:110px!important}
 html.pcview .inst-bar{left:14px!important;right:14px!important;max-width:none!important;transform:translateY(150%)!important}
 html.pcview .inst-bar.on{transform:none!important}
+
+html.pcview{--fs:18.5px}
+html.pcview body{font-size:18.5px}
+html.pcview .top .chip,html.pcview .searchbox{min-height:44px}
 </style>
 </head>
 <body class="dark">
