@@ -1,5 +1,5 @@
 // ධර්ම දීපය — offline support
-const V="dd-v6";
+const V="dd-v7";
 const CORE=["./","index.html","manifest.json","data.js","media.js","jataka54.js","monks.js","reels.js","pirith.js","places.js","brand/logo-192.png","brand/logo-512.png","brand/mark-256.png","favicon.ico"];
 self.addEventListener("install",e=>{ e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())); });
 self.addEventListener("activate",e=>{ e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim())); });
