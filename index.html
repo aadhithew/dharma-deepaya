@@ -1464,6 +1464,16 @@ body[data-theme]{transition:background-color .4s,color .4s}
 /* install bar never covers reels; reserve space when visible */
 body.reels-mode .inst-bar{display:none!important}
 body.inst-on main,body.inst-on footer{padding-bottom:96px}
+
+/* ═══════ Offline save ═══════ */
+.off-list{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px}
+.off-list li{padding:10px 14px;border-radius:12px;background:var(--surface-2);line-height:1.6}
+.off-list li.no{opacity:.7}
+.off-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.off-bar{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:12px 0 6px;border:1px solid var(--line)}
+.off-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:width .3s}
+.off-meta{font-size:.9em;opacity:.85}
+.off-ok{padding:12px 14px;border-radius:12px;border:1px solid var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent);line-height:1.7}
 </style>
 </head>
 <body class="dark">
@@ -1919,6 +1929,7 @@ const TABS = [
   ["quiz","help","ප්‍රශ්න","ඔබේ දැනුම පරීක්ෂා කරන්න","තවත්","දෑගල්දොරුව ජාතක සිතුවම්"],
   ["fav","star","ප්‍රියතම","ඔබ සුරැකි කතා සහ ගාථා","තවත්","පිපුණු නෙළුම් මල"],
   ["themes","palette","තේමා · Themes","බෞද්ධ සංස්කෘතියෙන් උපන් සන්සුන් වර්ණ — තේමා 12ක්","තවත්","පිපුණු නෙළුම් මල"],
+  ["offline","down","Offline සුරකින්න","ඉන්ටර්නෙට් නැතිවත් — කතා, ඡායාරූප සහ පිරිත් ශ්‍රව්‍ය","තවත්","පිපුණු නෙළුම් මල"],
   ["install","arrow","ඇප් එක ස්ථාපනය","ධර්ම දීපය ඔබේ දුරකථනයට එක් ක්ලික් එකකින්","තවත්","පිපුණු නෙළුම් මල"],
   ["translate","lang","පරිවර්තනය · Translate","මුළු යෙදුමම ඕනෑම භාෂාවකට පරිවර්තනය කරන්න","තවත්","පිපුණු නෙළුම් මල"]
 ];
@@ -1929,7 +1940,7 @@ let BOX=[], BI=0; const REG=[];
 function gal(list,cls="gal"){ if(!list||!list.length) return ""; const k=REG.push(list)-1;
   return `<div class="${cls}">${list.map((x,i)=>`<figure onclick="openBox(${k},${i})"><img loading="lazy" src="${x.t}" alt="${esc(x.c)}" referrerpolicy="no-referrer"><figcaption>${esc(x.c)}</figcaption></figure>`).join("")}</div>`; }
 function openBox(k,i){ BOX=REG[k]; BI=i; $("#mimg").classList.add("sw"); showBox(); $("#mbox").classList.add("on"); }
-function showBox(){ const x=BOX[BI]; const m=$("#mimg"); const done=()=>{ m.style.setProperty("--dx","0px"); requestAnimationFrame(()=>m.classList.remove("sw")); }; m.onload=done; clearTimeout(window.__bt); window.__bt=setTimeout(done,700); m.onerror=function(){this.onerror=null;this.src=x.t;}; m.src=big(x.t); $("#mcap").innerHTML=esc(x.c)+`<br><small style="opacity:.6">${BI+1} / ${BOX.length}</small>`; }
+function showBox(){ const x=BOX[BI]; const m=$("#mimg"); const done=()=>{ m.style.setProperty("--dx","0px"); requestAnimationFrame(()=>m.classList.remove("sw")); }; m.onload=done; clearTimeout(window.__bt); window.__bt=setTimeout(done,700); m.onerror=function(){ this.onerror=function(){ this.onerror=null; this.src=x.t; }; this.src=ddLite(x.t); }; m.src=navigator.onLine?big(x.t):ddLite(x.t); $("#mcap").innerHTML=esc(x.c)+`<br><small style="opacity:.6">${BI+1} / ${BOX.length}</small>`; }
 function stepBox(d){ const m=$("#mimg"); m.style.setProperty("--dx",(d>0?-40:40)+"px"); m.classList.add("sw"); setTimeout(()=>{ BI=(BI+d+BOX.length)%BOX.length; m.style.setProperty("--dx",(d>0?40:-40)+"px"); showBox(); },220); }
 function closeBox(){ $("#mbox").classList.remove("on"); }
 let tx0=null; $("#mbox").addEventListener("touchstart",e=>tx0=e.touches[0].clientX,{passive:true}); $("#mbox").addEventListener("touchend",e=>{ if(tx0===null)return; const dx=e.changedTouches[0].clientX-tx0; if(Math.abs(dx)>50) stepBox(dx<0?1:-1); tx0=null; });
@@ -2047,6 +2058,17 @@ const V = {
     const rec=THEMES.filter(t=>t.rec), other=THEMES.filter(t=>!t.rec);
     return hero("themes")+`<div class="thm-sec">★ නිර්දේශිත බෞද්ධ තේමා <small>Recommended · ${rec.length}</small></div><div class="thm-grid">${rec.map(card).join("")}</div>
       <div class="thm-sec">අනෙකුත් තේමා <small>More · ${other.length}</small></div><div class="thm-grid">${other.map(card).join("")}</div>`; },
+  offline(){ return hero("offline")+`<div class="card off-card" style="max-width:760px;margin-top:22px">
+     <h3 style="margin-top:0">📥 ඉන්ටර්නෙට් නැතිවත් ධර්ම දීපය</h3>
+     <p class="meaning">එක් වරක් බාගත කළ පසු, ඉන්ටර්නෙට් නැති තැනකදීත් (ගමනේදී, විහාරයේදී) ඇප් එක විවෘත කර කියවිය හැක, පිරිත් ඇසිය හැක.</p>
+     <ul class="off-list">
+       <li>✅ බුදු සිරිත, ජාතක කතා 54, බණ කතා, ඉතිහාසය, ධර්මය, ධම්මපදය, ගාථා, පොහොය</li>
+       <li>✅ පිරිත් සූත්‍ර 44 — පාලි, සිංහල අර්ථය සහ <b>ශ්‍රව්‍ය</b> (එක් හඬක් බැගින්)</li>
+       <li>✅ ඇප් එකේ ඡායාරූප</li>
+       <li class="no">✖ බණ රීල්ස්, වීඩියෝ, සිතියම, ස්වාමීන් වහන්සේලාගේ බණ සහ පරිවර්තනය — ඉන්ටර්නෙට් අවශ්‍යයි</li>
+     </ul>
+     <div id="offBox">${offBoxHTML()}</div>
+     <p class="meaning" style="font-size:.85em;opacity:.75;margin-bottom:0">💡 ප්‍රමාණය ≈ 115 MB. Wi‑Fi භාවිතා කිරීම නිර්දේශිතයි. හොඳම ප්‍රතිඵලයට පළමුව ඇප් එක ස්ථාපනය කරන්න (⬇ ඇප් එක).</p></div>`; },
   install(){ return hero("install")+`<div class="card" style="max-width:760px;margin-top:22px">
      <h3 style="margin-top:0">📱 Android (Chrome)</h3><p class="meaning">ඉහළ ඇති <b>⬇ ඇප් එක</b> බොත්තම හෝ පහළ <b>ස්ථාපනය</b> බොත්තම ඔබන්න → <b>Install</b>. බොත්තම නොපෙනේ නම්: Chrome මෙනුව <b>⋮</b> → <b>Install app / Add to Home screen</b>.</p>
      <h3>🍎 iPhone / iPad (Safari)</h3><div class="inst-ios">1. පහළ ඇති <b>Share</b> බොත්තම (⬆️ කොටුව) ඔබන්න<br>2. <b>Add to Home Screen</b> තෝරන්න<br>3. <b>Add</b> ඔබන්න — ධර්ම දීපය අයිකනය ඔබේ තිරයට එයි.</div>
@@ -2241,7 +2263,7 @@ const TIERS={1:"⭐ ප්‍රසිද්ධ",2:"මධ්‍යම",3:"අ�
 function mpLoadLeaflet(){ if(window.L) return Promise.resolve();
   if(MP.lp) return MP.lp;
   MP.lp=new Promise((res,rej)=>{ const c=document.createElement("link"); c.rel="stylesheet"; c.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(c);
-    const s=document.createElement("script"); s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+    const s=document.createElement("script"); s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload=res; s.onerror=()=>{ MP.lp=null; const m=$("#pmap"); if(m) m.innerHTML=`<p class="meaning" style="padding:24px;text-align:center">🌐 සිතියම සඳහා ඉන්ටර්නෙට් අවශ්‍යයි.</p>`; rej(new Error("offline")); }; document.head.appendChild(s); });
   return MP.lp; }
 function mpKm(a,b,c,d){ const R=6371,r=Math.PI/180,x=Math.sin((c-a)*r/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin((d-b)*r/2)**2; return 2*R*Math.asin(Math.sqrt(x)); }
 function mpIcon(p,sel){ const t=PTYPES[p.t], sm=!sel&&(p.tier||2)===3, w=sel?44:sm?26:34;
@@ -2358,15 +2380,77 @@ async function mpRoute(id){ const p=PLACES.find(x=>x.id===id); if(!MP.me||!p) re
 function mpMode(m){ MP.mode=m; document.querySelectorAll("#mpModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===m)); MP.d={}; if(MP.route){ MP.route.remove(); MP.route=null; $("#mpSteps").innerHTML=""; } mpList(); mpTable(); }
 
 // ════ පිරිත් player ════
+
+// ════ Offline save: texts + photos + one pirith voice each (no sermon recordings) ════
+const OFF="dd-offline";
+const offMB=b=>(b/1048576).toFixed(b>1048576*10?0:1);
+function offState(){ try{ return JSON.parse(localStorage.getItem("dd_off")||"null"); }catch(e){ return null; } }
+function offBoxHTML(){ const st=offState();
+  if(window.__offRun) return `<div class="off-bar"><i id="offI" style="width:${window.__offPct||0}%"></i></div><div class="off-meta" id="offM">බාගත වෙමින්…</div><div class="off-row"><button class="btn ghost" onclick="offStop()">✖ නවත්වන්න</button></div>`;
+  if(st) return `<div class="off-ok">✅ <b>Offline සුරකින ලදී</b> — ${new Date(st.t).toLocaleDateString("si-LK")} · ගොනු ${st.n} · ${offMB(st.b)} MB${st.f?`<br><small>⚠ ගොනු ${st.f}ක් බාගත නොවීය — "යාවත්කාලීන" ඔබා නැවත උත්සාහ කරන්න.</small>`:""}</div>
+    <div class="off-row"><button class="btn" onclick="offSave()">🔄 යාවත්කාලීන කරන්න</button><button class="btn ghost" onclick="offDelete()">🗑 මකන්න</button></div>`;
+  return `<div class="off-row"><button class="btn" onclick="offSave()">📥 සියල්ල බාගත කරන්න (~115 MB)</button></div>`; }
+function offPaint(){ const b=$("#offBox"); if(b) b.innerHTML=offBoxHTML(); }
+function offCollect(){
+  const urls=new Set();
+  const add=u=>{ if(!u) return; u=String(u).replace(/&amp;/g,"&").trim(); if(!u||/^(data|blob|javascript):/.test(u)||u.includes("${")) return; try{ const x=new URL(u,location.href); if(/^https?:$/.test(x.protocol)&&!/youtube|ytimg|tiktok|googlevideo|openstreetmap|unpkg|osrm|archive\.org/.test(x.host)&&!/\/transcoded\/|\.(mp3|m4a|mp4|webm|ogv|ogg|mov|wav)(\?|$)/i.test(x.pathname)) urls.add(x.href); }catch(e){} };
+  const grab=h=>{ if(!h) return; h=ddLite(String(h));
+    for(const m of h.matchAll(/\b(?:src|poster)="([^"]+)"/g)) add(m[1]);
+    for(const m of h.matchAll(/url\('([^']+)'\)/g)) add(m[1]);
+    for(const m of h.matchAll(/url\(&quot;(.*?)&quot;\)/g)) add(m[1]);
+    for(const m of h.matchAll(/url\("([^"]+)"\)/g)) add(m[1]); };
+  const skip=new Set(["reels","map","translate","pread","jread","mread","offline"]);
+  for(const k of Object.keys(V)){ if(skip.has(k)||typeof V[k]!=="function") continue; try{ grab(V[k]()); }catch(e){} }
+  (window.J54||[]).forEach(j=>{ try{ grab(V.jread(j.no)); }catch(e){} add(jImg(j.no)); });
+  ((window.MONKS||{}).monks||[]).forEach(m=>{ try{ grab(V.mread(m.id)); }catch(e){} if(m.img) add("monks/"+m.img); });
+  try{ RLIST().forEach(v=>add(v.src.replace("hero/","hero/sm/").replace("hero/sm/sm/","hero/sm/"))); }catch(e){}
+  ["brand/mark-256.png","brand/logo-192.png","brand/logo-512.png","brand/apple-touch.png","favicon.ico"].forEach(add);
+  const audio=(window.PIRITH||[]).map(x=>x.au&&x.au[0]&&x.au[0].u).filter(Boolean).map(u=>new URL(u,location.href).href);
+  return {imgs:[...urls].filter(u=>!audio.includes(u)),audio}; }
+async function offFonts(cache){ const l=document.querySelector('link[rel="stylesheet"][href*="fonts.googleapis"]'); if(!l) return []; try{
+  const r=await fetch(l.href,{mode:"cors"}); if(!r.ok) return []; const css=await r.clone().text(); await cache.put(l.href,r);
+  return [...css.matchAll(/url\((https:[^)]+)\)/g)].map(m=>m[1]); }catch(e){ return []; } }
+async function offSave(){
+  if(window.__offRun) return; if(!("caches" in window)){ alert("මෙම බ්‍රව්සරය offline සුරැකීමට සහාය නොදක්වයි."); return; }
+  if(!navigator.onLine){ (window.toast||alert)("බාගත කිරීමට ඉන්ටර්නෙට් අවශ්‍යයි"); return; }
+  window.__offRun={stop:false}; window.__offPct=0; offPaint();
+  try{ if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist(); }catch(e){}
+  if(!window.PIRITH){ await new Promise(r=>{ const t=setInterval(()=>{ if(window.PIRITH){clearInterval(t);r();} },200); setTimeout(()=>{clearInterval(t);r();},8000); }); }
+  const cache=await caches.open(OFF);
+  // the app shell itself
+  try{ const sh=["./","index.html","manifest.json","data.js","media.js","jataka54.js","monks.js","reels.js","pirith.js","places.js"]; await Promise.all(sh.map(u=>fetch(u,{cache:"reload"}).then(r=>r.ok&&cache.put(u,r)).catch(()=>{}))); }catch(e){}
+  const {imgs,audio}=offCollect(); const fonts=await offFonts(cache);
+  const list=[...imgs,...fonts,...audio]; let done=0, bytes=0, fail=0; const N=list.length;
+  const paint=()=>{ window.__offPct=Math.round(done/N*100); const i=$("#offI"), m=$("#offM"); if(i) i.style.width=window.__offPct+"%"; if(m) m.textContent=`${done} / ${N} ගොනු · ${offMB(bytes)} MB · ${window.__offPct}%`; };
+  const one=async u=>{ const hit=await cache.match(u,{ignoreVary:true}); if(hit){ const l=+hit.headers.get("content-length")||0; bytes+=l; return; }
+    for(let a=0;a<3;a++){ if(window.__offRun.stop) return;
+      try{ let r=await fetch(u,{mode:"cors",credentials:"omit"});
+        if(r.status===429||r.status>=500){ await new Promise(z=>setTimeout(z,2500*(a+1))); continue; }
+        if(!r.ok){ fail++; return; } const b=await r.clone().blob(); bytes+=b.size; await cache.put(u,r); return;
+      }catch(e){ try{ const r=await fetch(u,{mode:"no-cors",credentials:"omit"}); await cache.put(u,r); return; }catch(e2){ await new Promise(z=>setTimeout(z,1500)); } } }
+    fail++; };
+  let k=0; const worker=async()=>{ while(k<N&&!window.__offRun.stop){ const u=list[k++]; await one(u); done++; paint(); } };
+  await Promise.all([worker(),worker(),worker(),worker()]);
+  const stopped=window.__offRun.stop; window.__offRun=null;
+  if(!stopped){ localStorage.setItem("dd_off",JSON.stringify({t:Date.now(),n:N-fail,b:bytes,f:fail})); (window.toast||(()=>{}))("✅ Offline සුරකින ලදී — ඉන්ටර්නෙට් නැතිවත් භාවිතා කළ හැක"); }
+  offPaint(); }
+function offStop(){ if(window.__offRun) window.__offRun.stop=true; }
+async function offDelete(){ if(!confirm("Offline සුරකින ලද ගොනු මකන්නද?")) return; await caches.delete(OFF); localStorage.removeItem("dd_off"); offPaint(); (window.toast||(()=>{}))("Offline ගොනු මකා දැමුණි"); }
+// play saved pirith audio from the phone (works offline, seeking works)
+async function prLocal(u){ try{ if(!("caches" in window)) return null; const r=await caches.match(new URL(u,location.href).href,{cacheName:OFF,ignoreVary:true}); if(!r||r.type==="opaque") return null; return URL.createObjectURL(await r.blob()); }catch(e){ return null; } }
+addEventListener("offline",()=>(window.toast||(()=>{}))("📴 ඉන්ටර්නෙට් නැත — සුරකින ලද අන්තර්ගතය පෙන්වයි"));
+
 let PR=null;
 function prInit(x){ const a=$("#prA"); if(!a) return; PR={x,v:0,a,cur:-1};
+  prLocal(x.au[0].u).then(b=>{ if(b&&PR&&PR.x===x&&PR.v===0&&PR.a===a&&a.paused&&!a.currentTime){ a.src=b; } });
   a.ontimeupdate=()=>{ if(!PR||!PR.x.au[PR.v].sync||!PR.x.lab.length) return; const t=a.currentTime, L=PR.x.lab; let i=-1;
     for(let k=0;k<L.length;k++){ if(L[k]<=t+0.15) i=k; else break; }
     if(i!==PR.cur){ PR.cur=i; document.querySelectorAll(".pr-line.on").forEach(e=>e.classList.remove("on")); const el=document.querySelector(`.pr-line[data-i="${i}"]`);
       if(el){ el.classList.add("on"); if($("#prFollow")?.checked){ const r=el.getBoundingClientRect(); if(r.top<170||r.bottom>innerHeight-40) scrollTo({top:scrollY+r.top-200,behavior:"smooth"}); } } } };
   if("mediaSession" in navigator) navigator.mediaSession.metadata=new MediaMetadata({title:x.n,artist:x.au[0].who,album:"ධර්ම දීපය — පිරිත්",artwork:[{src:"brand/mark-256.png",sizes:"256x256",type:"image/png"}]});
 }
-function prVoice(i){ if(!PR) return; PR.v=i; const a=PR.a, was=!a.paused; a.src=PR.x.au[i].u; if(was) a.play().catch(()=>{});
+function prVoice(i){ if(!PR) return; PR.v=i; const a=PR.a, was=!a.paused, x=PR.x; a.src=x.au[i].u; if(was) a.play().catch(()=>{});
+  if(i===0) prLocal(x.au[0].u).then(b=>{ if(b&&PR&&PR.x===x&&PR.v===0){ const w=!a.paused; a.src=b; if(w) a.play().catch(()=>{}); } });
   document.querySelectorAll(".pr-voices button").forEach((b,k)=>b.classList.toggle("on",k===i));
   document.querySelectorAll(".pr-line.on").forEach(e=>e.classList.remove("on")); PR.cur=-1; }
 function prSeek(i){ if(!PR) return; const a=PR.a;
@@ -2774,7 +2858,7 @@ const QS=[
  ["බුදුරජාණන් වහන්සේ ප්‍රථම ලංකා ගමනේදී වැඩම කළේ කොහිද?",["කැලණිය","නාගදීපය","මහියංගණය","ශ්‍රී පාදය"],2]
 ];
 let sc=0, tot=0;
-function newQ(){
+function newQ(){ if(!$("#qz")) return;
   const q=QS[Math.floor(Math.random()*QS.length)];
   $("#qz").innerHTML=`<div class="eyebrow">ප්‍රශ්නය</div><h3 style="margin:6px 0 12px">${esc(q[0])}</h3>`+q[1].map((o,i)=>`<button class="opt" onclick="ans(this,${i},${q[2]})">${esc(o)}</button>`).join("");
   $("#score").textContent = tot?`ලකුණු: ${sc} / ${tot}`:"";
