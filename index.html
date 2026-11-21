@@ -1406,7 +1406,7 @@ body[data-theme]{transition:background-color .4s,color .4s}
   .leaflet-popup-content{min-width:0!important;max-width:calc(100vw - 90px)!important;margin:10px 12px!important}
   .mp-pop .acts a,.mp-pop .acts button{padding:9px 11px!important;font-size:13px!important}
   /* ── themes ── */
-  .thm-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}
+  .thm-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
   .thm{padding:10px!important;gap:7px!important}
   .thm .pv{height:62px!important}
   .thm .why{display:none}
@@ -1414,7 +1414,7 @@ body[data-theme]{transition:background-color .4s,color .4s}
   .thm .nm b{font-size:.95em}.thm .nm small{font-size:.75em}
   .thm-sec{flex-wrap:wrap;font-size:15px}
   /* ── translate ── */
-  .tr-grid{grid-template-columns:repeat(2,1fr)!important}
+  .tr-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   /* ── reels: true full-screen feel ── */
   body.reels-mode .top{position:fixed;left:0;right:0;background:linear-gradient(#000a,#0000)!important;border:0!important;backdrop-filter:none!important}
   body.reels-mode .rfeed{height:100svh!important}
