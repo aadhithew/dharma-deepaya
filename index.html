@@ -2,7 +2,8 @@
 <html lang="si">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" id="vp" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>(function(){var w=Math.min(screen.width,screen.height);if(w<820){document.getElementById("vp").setAttribute("content","width=900, viewport-fit=cover");document.documentElement.classList.add("pcview");}})();</script>
 <meta name="theme-color" content="#d0690b">
 <link rel="icon" href="brand/mark-64.png" type="image/png">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -1446,6 +1447,15 @@ body[data-theme]{transition:background-color .4s,color .4s}
   .pr-filters,.mp-legend,.mp-modes,.pr-voices{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
   #pmap{margin:0!important}
 }
+
+/* phones showing the PC layout (scaled) */
+html.pcview{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html.pcview .inst-bar{max-width:640px}
+html.pcview .leaflet-control-zoom{display:none!important}
+
+html.pcview body.inst-on main,html.pcview body.inst-on footer{padding-bottom:110px!important}
+html.pcview .inst-bar{left:14px!important;right:14px!important;max-width:none!important;transform:translateY(150%)!important}
+html.pcview .inst-bar.on{transform:none!important}
 </style>
 </head>
 <body class="dark">
@@ -1454,8 +1464,6 @@ body[data-theme]{transition:background-color .4s,color .4s}
   <div class="brand"><div class="mark"><img src="brand/mark-256.png" alt="ධර්ම දීපය ලාංඡනය" width="44" height="44"></div><div><b>ධර්ම දීපය</b><small>Dharma Deepaya</small></div><button class="chip close" onclick="document.body.classList.remove('nav-open')" aria-label="වසන්න"><svg class="ico"><use href="#i-x"/></svg></button></div>
   <nav class="menu" id="nav"></nav>
   <div class="side-foot">
-    <button class="chip" onclick="fs(-1)" title="අකුරු කුඩා">අ−</button>
-    <button class="chip" onclick="fs(1)" title="අකුරු විශාල">අ+</button>
     <button class="chip notranslate" translate="no" onclick="go('translate')" title="Translate">🌐 <span id="trCurLbl">සිං</span></button>
   </div>
 </aside>
@@ -2237,7 +2245,7 @@ async function mpInit(){
   try{ await mpLoadLeaflet(); }catch(e){ $("#mpSt").textContent="සිතියම පූරණය කළ නොහැක — අන්තර්ජාලය පරීක්ෂා කරන්න."; return; }
   if(MP.map){ MP.map.remove(); MP.markers={}; MP.meMk=null; MP.route=null; }
   MP.on=MP.on||new Set();
-  const m=MP.map=L.map("pmap",{zoomControl:true,attributionControl:true}).setView([7.75,80.75],7);
+  const m=MP.map=L.map("pmap",{zoomControl:false,attributionControl:true}).setView([7.75,80.75],7);
   const tl=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(m);
   let tErr=0; tl.on("tileerror",()=>{ if(++tErr===6){ m.removeLayer(tl); L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",{subdomains:"abc",maxZoom:19,attribution:'&copy; OpenStreetMap · OSM France'}).addTo(m); } });
   MP.cl = L.layerGroup().addTo(m);
@@ -2766,7 +2774,7 @@ function ans(b,i,c){
 }
 
 // Settings
-let size=+localStorage.getItem("dd_fs")||17;
+let size=17; localStorage.removeItem("dd_fs");
 function fs(d){ size=Math.min(24,Math.max(14,size+d)); document.documentElement.style.setProperty("--fs",size+"px"); localStorage.setItem("dd_fs",size); }
 
 fs(0); nav(); render();
