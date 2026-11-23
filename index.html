@@ -1474,10 +1474,55 @@ body.inst-on main,body.inst-on footer{padding-bottom:96px}
 .off-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2));transition:width .3s}
 .off-meta{font-size:.9em;opacity:.85}
 .off-ok{padding:12px 14px;border-radius:12px;border:1px solid var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent);line-height:1.7}
+
+/* ═══════ Simple / Advanced mode ═══════ */
+.mode-sw{display:flex;gap:4px;padding:4px;margin:6px 8px 10px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+.mode-sw button{flex:1;border:0;background:none;color:var(--muted);font:600 14px 'Noto Sans Sinhala',sans-serif;padding:9px 6px;border-radius:10px;cursor:pointer;transition:background .25s,color .25s}
+.mode-sw button.on,.menu .mode-sw button.on,body .menu .mode-sw button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2))!important;color:#1a0f05!important;box-shadow:0 4px 14px -6px var(--gold)!important;border:0!important}
+.menu .mode-sw button{min-height:44px!important;justify-content:center!important;padding:8px 6px!important;margin:0!important;border:0!important;background:none!important}
+.menu .mode-sw button::before,.menu .mode-sw button::after{display:none!important}
+.s-mode .mode-sw{margin:12px 0 0;max-width:360px}
+/* simple mode: bigger, calmer, fewer things */
+body.simple{--fs:20px}
+body.simple #app{font-size:20px;line-height:1.85}
+body.simple .menu button{font-size:17px;min-height:52px}
+body.simple .menu button .ico{width:24px;height:24px}
+body.simple .top .chip:not(.burger){display:none!important}
+body.simple .top .chip.burger{width:52px;height:52px}
+body.simple .searchbox{height:52px;font-size:18px}
+body.simple .phero{min-height:150px!important}
+body.simple .phero .kb,body.simple .phero .cap{display:none!important}
+body.simple .phero h1{font-size:34px!important}
+body.simple .card,body.simple .pr-card{font-size:1em}
+body.simple .tag,body.simple .eyebrow{font-size:15px!important}
+body.simple .btn{font-size:18px;min-height:52px;padding:0 22px}
+body.simple .pr-line{font-size:1.1em;padding:14px 16px!important}
+body.simple .fav,body.simple .opt{min-height:52px}
+body.simple .inst-bar{display:none!important}
+body.simple .phero *,body.simple .s-tile{animation:none!important}
+body.simple .tag,body.simple .sec-title span,body.simple .pr-meta,body.simple .pr-head small{font-size:15.5px!important;opacity:1!important}
+body.simple .pr-voices{flex-wrap:wrap!important;overflow:visible!important;-webkit-mask-image:none!important;mask-image:none!important}
+body.simple .pr-voices button{white-space:normal!important;text-align:left;flex:1 1 100%!important}
+body.simple .pr-opts{font-size:17px!important}
+body.simple .pr-opts input{width:22px;height:22px}
+.s-hello{display:flex;align-items:center;gap:16px;margin:18px 0 14px}
+.s-hello img{width:72px;height:72px;border-radius:18px}
+.s-hello h1{margin:0;font-size:36px;line-height:1.2}
+.s-hello p{margin:2px 0 0;color:var(--muted);font-size:19px}
+.s-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:760px){.s-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.s-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:128px;padding:16px 10px;border-radius:20px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font:700 21px 'Noto Sans Sinhala',sans-serif;transition:transform .15s,border-color .2s}
+.s-tile:active{transform:scale(.97)}
+.s-tile:hover{border-color:var(--gold)}
+.s-tile .ico{width:42px;height:42px;color:var(--gold)}
+.s-card{margin:16px 0;padding:18px 20px;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
+.s-card .pali{font-size:22px;color:var(--gold);margin:8px 0;line-height:1.8;white-space:pre-line}
+.s-card .meaning{font-size:19px}
+.s-card p{margin:6px 0 0;color:var(--muted)}
 </style>
 </head>
 <body class="dark">
-<script>var THEMES=[{"id": "rays", "si": "බුදු රැස්", "en": "Buddha Rays", "dark": 0, "bg": "#fbf8f1", "sf": "#fffefa", "sf2": "#f3ecdc", "ink": "#1f1a14", "mu": "#665b4c", "ac": "#2e5aa8", "g2": "#e8a93a", "rec": 1, "why": "බුද්ධත්වයේදී බුදු සිරුරින් නික්මුණු ෂඩ් වර්ණ රශ්මිය — නීල, පීත, ලෝහිත, ඕදාත, මාංජෙට්ඨ. 1885 දී ලංකාවේ නිර්මිත බෞද්ධ ධජයේ වර්ණ.", "grad": "linear-gradient(90deg,#2e5aa8 0%,#f2b632 22%,#c8352b 44%,#fff7e6 62%,#ef8a1c 82%,#e8a93a 100%)"}, {"id": "bodhi", "si": "බෝ කොළ", "en": "Bodhi Leaf", "dark": 0, "bg": "#e8f0df", "sf": "#f6faf1", "sf2": "#d7e5c8", "ink": "#1b2418", "mu": "#566451", "ac": "#4f7a3a", "g2": "#8db35a", "rec": 1, "why": "ශ්‍රී මහා බෝධීන් වහන්සේගේ සන්සුන් කොළ පැහැය සහ පැරණි බෝමළුවේ රන්වන් පලස් — සිහිය සහ නිවීම.", "grad": null}, {"id": "mural", "si": "දෑගල්දොරුව සිතුවම්", "en": "Kandyan Mural", "dark": 1, "bg": "#1c0c08", "sf": "#2a130d", "sf2": "#351a12", "ink": "#f7e7cf", "mu": "#cfae88", "ac": "#e8b04a", "g2": "#e8b04a", "rec": 1, "why": "මහනුවර යුගයේ විහාර බිතු සිතුවම්වල රතු පස් (iron-oxide) පසුබිම, රන්වන් කහ රූප සහ හුණු සුදු තිත්.", "grad": "linear-gradient(135deg,#ffe0a0 0%,#e8b04a 40%,#c8352b 100%)"}, {"id": "poya", "si": "පොහොය සඳ", "en": "Poya Moonlight", "dark": 1, "bg": "#0c1020", "sf": "#121831", "sf2": "#19213f", "ink": "#eef0fa", "mu": "#a3acc9", "ac": "#f3d98b", "g2": "#f3d98b", "rec": 1, "why": "පුන් පොහොය රාත්‍රියේ නිල් අහස, සඳ එළිය සහ සීල සමාදන් වූ සන්සුන් සිත.", "grad": "linear-gradient(135deg,#fff4cf 0%,#f3d98b 50%,#c9b27a 100%)"}, {"id": "dagoba", "si": "රුවන්වැලි සෑය", "en": "Stupa White", "dark": 0, "bg": "#f8f7f4", "sf": "#ffffff", "sf2": "#eeece6", "ink": "#22201c", "mu": "#6b665c", "ac": "#b5651d", "g2": "#d98a3d", "rec": 1, "why": "හුණු සුදු රුවන්වැලි මහා සෑය, කළුගල් මළුව සහ කහ සිවුරු — පිරිසිදු, සරල, නිස්කලංක.", "grad": null}, {"id": "gold", "si": "රන් රාත්‍රිය", "en": "Gold Night", "dark": 1, "bg": "#0d0b09", "sf": "#15120f", "sf2": "#1c1814", "ink": "#f1e9da", "mu": "#a69884", "ac": "#d8bb7e", "g2": "#d8bb7e"}, {"id": "saffron", "si": "කහ සිවුර", "en": "Saffron Light", "dark": 0, "bg": "#fff7ea", "sf": "#fffdf8", "sf2": "#fbeccf", "ink": "#2b170b", "mu": "#6d5640", "ac": "#d0690b", "g2": "#f39a1e"}, {"id": "lotus", "si": "නෙළුම් මල", "en": "Lotus Pink", "dark": 0, "bg": "#fff5f8", "sf": "#ffffff", "sf2": "#fde4ec", "ink": "#2d1520", "mu": "#7a5464", "ac": "#c2416e", "g2": "#ea7aa0"}, {"id": "forest", "si": "වන සෙනසුන", "en": "Forest Green", "dark": 1, "bg": "#0b120d", "sf": "#111b14", "sf2": "#17251b", "ink": "#e7f1e6", "mu": "#9bb39d", "ac": "#7fcf8e", "g2": "#7fcf8e"}, {"id": "ocean", "si": "නිල් අහස", "en": "Ocean Blue", "dark": 1, "bg": "#08101c", "sf": "#0e1828", "sf2": "#132036", "ink": "#e6eefb", "mu": "#93a6c4", "ac": "#6aa8ff", "g2": "#6aa8ff"}, {"id": "white", "si": "පිරිසිදු සුදු", "en": "Pure White", "dark": 0, "bg": "#f7f8fa", "sf": "#ffffff", "sf2": "#eef1f5", "ink": "#15181d", "mu": "#5b6472", "ac": "#2563eb", "g2": "#5b8def"}, {"id": "maroon", "si": "සිවුරු රතු", "en": "Robe Maroon", "dark": 1, "bg": "#140708", "sf": "#1d0c0e", "sf2": "#271214", "ink": "#f6e6e3", "mu": "#c09a94", "ac": "#ff9b54", "g2": "#ff9b54"}];(function(){var t=localStorage.getItem("dd_theme")||"gold";document.body.dataset.theme=t;var o=THEMES.find(function(x){return x.id===t})||THEMES[0];document.body.dataset.theme=o.id;document.body.classList.toggle("dark",!!o.dark);})()</script>
+<script>var THEMES=[{"id": "rays", "si": "බුදු රැස්", "en": "Buddha Rays", "dark": 0, "bg": "#fbf8f1", "sf": "#fffefa", "sf2": "#f3ecdc", "ink": "#1f1a14", "mu": "#665b4c", "ac": "#2e5aa8", "g2": "#e8a93a", "rec": 1, "why": "බුද්ධත්වයේදී බුදු සිරුරින් නික්මුණු ෂඩ් වර්ණ රශ්මිය — නීල, පීත, ලෝහිත, ඕදාත, මාංජෙට්ඨ. 1885 දී ලංකාවේ නිර්මිත බෞද්ධ ධජයේ වර්ණ.", "grad": "linear-gradient(90deg,#2e5aa8 0%,#f2b632 22%,#c8352b 44%,#fff7e6 62%,#ef8a1c 82%,#e8a93a 100%)"}, {"id": "bodhi", "si": "බෝ කොළ", "en": "Bodhi Leaf", "dark": 0, "bg": "#e8f0df", "sf": "#f6faf1", "sf2": "#d7e5c8", "ink": "#1b2418", "mu": "#566451", "ac": "#4f7a3a", "g2": "#8db35a", "rec": 1, "why": "ශ්‍රී මහා බෝධීන් වහන්සේගේ සන්සුන් කොළ පැහැය සහ පැරණි බෝමළුවේ රන්වන් පලස් — සිහිය සහ නිවීම.", "grad": null}, {"id": "mural", "si": "දෑගල්දොරුව සිතුවම්", "en": "Kandyan Mural", "dark": 1, "bg": "#1c0c08", "sf": "#2a130d", "sf2": "#351a12", "ink": "#f7e7cf", "mu": "#cfae88", "ac": "#e8b04a", "g2": "#e8b04a", "rec": 1, "why": "මහනුවර යුගයේ විහාර බිතු සිතුවම්වල රතු පස් (iron-oxide) පසුබිම, රන්වන් කහ රූප සහ හුණු සුදු තිත්.", "grad": "linear-gradient(135deg,#ffe0a0 0%,#e8b04a 40%,#c8352b 100%)"}, {"id": "poya", "si": "පොහොය සඳ", "en": "Poya Moonlight", "dark": 1, "bg": "#0c1020", "sf": "#121831", "sf2": "#19213f", "ink": "#eef0fa", "mu": "#a3acc9", "ac": "#f3d98b", "g2": "#f3d98b", "rec": 1, "why": "පුන් පොහොය රාත්‍රියේ නිල් අහස, සඳ එළිය සහ සීල සමාදන් වූ සන්සුන් සිත.", "grad": "linear-gradient(135deg,#fff4cf 0%,#f3d98b 50%,#c9b27a 100%)"}, {"id": "dagoba", "si": "රුවන්වැලි සෑය", "en": "Stupa White", "dark": 0, "bg": "#f8f7f4", "sf": "#ffffff", "sf2": "#eeece6", "ink": "#22201c", "mu": "#6b665c", "ac": "#b5651d", "g2": "#d98a3d", "rec": 1, "why": "හුණු සුදු රුවන්වැලි මහා සෑය, කළුගල් මළුව සහ කහ සිවුරු — පිරිසිදු, සරල, නිස්කලංක.", "grad": null}, {"id": "gold", "si": "රන් රාත්‍රිය", "en": "Gold Night", "dark": 1, "bg": "#0d0b09", "sf": "#15120f", "sf2": "#1c1814", "ink": "#f1e9da", "mu": "#a69884", "ac": "#d8bb7e", "g2": "#d8bb7e"}, {"id": "saffron", "si": "කහ සිවුර", "en": "Saffron Light", "dark": 0, "bg": "#fff7ea", "sf": "#fffdf8", "sf2": "#fbeccf", "ink": "#2b170b", "mu": "#6d5640", "ac": "#d0690b", "g2": "#f39a1e"}, {"id": "lotus", "si": "නෙළුම් මල", "en": "Lotus Pink", "dark": 0, "bg": "#fff5f8", "sf": "#ffffff", "sf2": "#fde4ec", "ink": "#2d1520", "mu": "#7a5464", "ac": "#c2416e", "g2": "#ea7aa0"}, {"id": "forest", "si": "වන සෙනසුන", "en": "Forest Green", "dark": 1, "bg": "#0b120d", "sf": "#111b14", "sf2": "#17251b", "ink": "#e7f1e6", "mu": "#9bb39d", "ac": "#7fcf8e", "g2": "#7fcf8e"}, {"id": "ocean", "si": "නිල් අහස", "en": "Ocean Blue", "dark": 1, "bg": "#08101c", "sf": "#0e1828", "sf2": "#132036", "ink": "#e6eefb", "mu": "#93a6c4", "ac": "#6aa8ff", "g2": "#6aa8ff"}, {"id": "white", "si": "පිරිසිදු සුදු", "en": "Pure White", "dark": 0, "bg": "#f7f8fa", "sf": "#ffffff", "sf2": "#eef1f5", "ink": "#15181d", "mu": "#5b6472", "ac": "#2563eb", "g2": "#5b8def"}, {"id": "maroon", "si": "සිවුරු රතු", "en": "Robe Maroon", "dark": 1, "bg": "#140708", "sf": "#1d0c0e", "sf2": "#271214", "ink": "#f6e6e3", "mu": "#c09a94", "ac": "#ff9b54", "g2": "#ff9b54"}];(function(){var t=localStorage.getItem("dd_theme")||"gold";document.body.dataset.theme=t;var o=THEMES.find(function(x){return x.id===t})||THEMES[0];document.body.dataset.theme=o.id;document.body.classList.toggle("dark",!!o.dark);if(localStorage.getItem("dd_mode")==="simple")document.body.classList.add("simple");})()</script>
 <aside class="side" id="side">
   <div class="brand"><div class="mark"><img src="brand/mark-256.png" alt="ධර්ම දීපය ලාංඡනය" width="44" height="44"></div><div><b>ධර්ම දීපය</b><small>Dharma Deepaya</small></div><button class="chip close" onclick="document.body.classList.remove('nav-open')" aria-label="වසන්න"><svg class="ico"><use href="#i-x"/></svg></button></div>
   <nav class="menu" id="nav"></nav>
@@ -1955,8 +2000,17 @@ let favs = JSON.parse(localStorage.getItem("dd_favs")||"[]");
 function favBtn(id){ const on=favs.includes(id); return `<button class="fav ${on?"on":""}" onclick="event.preventDefault();event.stopPropagation();toggleFav('${id}')" title="ප්‍රියතම">${I("star")}</button>`; }
 function toggleFav(id){ window.__pop=id; favs = favs.includes(id)?favs.filter(x=>x!==id):[...favs,id]; localStorage.setItem("dd_favs",JSON.stringify(favs)); const y=scrollY; render(true); scrollTo(0,y); document.querySelectorAll(`.fav`).forEach(b=>{ if(b.getAttribute('onclick').includes(`'${id}'`)) b.classList.add('pop'); }); }
 
+// ════ Simple / Advanced mode ════
+const SIMPLE_TABS=["home","life","jataka","bana","pirith","gatha","dhammapada","meditate","poya","fav","offline"];
+const isSimple=()=>{ const sm=localStorage.getItem("dd_mode")==="simple"; document.body.classList.toggle("simple",sm); return sm; };
+function setMode(m){ localStorage.setItem("dd_mode",m); document.body.classList.toggle("simple",m==="simple"); nav(); render(true); modeSync();
+  (window.toast||(()=>{}))(m==="simple"?"🙏 සරල ක්‍රමය — විශාල අකුරු, ප්‍රධාන කොටස් පමණි":"✨ සම්පූර්ණ ක්‍රමය — සියලු කොටස්"); }
+function modeSync(){ document.querySelectorAll(".mode-sw button").forEach(b=>b.classList.toggle("on",b.dataset.m===(isSimple()?"simple":"adv"))); }
+const modeSwitch=()=>{ const sm=isSimple(); return `<div class="mode-sw" role="group" aria-label="ක්‍රමය"><button data-m="simple" class="${sm?"on":""}" aria-pressed="${sm}" onclick="setMode('simple')">සරල</button><button data-m="adv" class="${sm?"":"on"}" aria-pressed="${!sm}" onclick="setMode('adv')">සම්පූර්ණ</button></div>`; };
 function nav(){
+  if(isSimple()){ $("#nav").innerHTML = modeSwitch()+TABS.filter(t=>SIMPLE_TABS.includes(t[0])).map(t=>`<button data-t="${t[0]}" onclick="go('${t[0]}')">${I(t[1])}<span>${t[2]}</span></button>`).join(""); modeSync(); return; }
   let g=""; $("#nav").innerHTML = TABS.map(t=>{ const head = t[4]!==g ? `<div class="grp">${(g=t[4])}</div>` : ""; return head+`<button data-t="${t[0]}" onclick="go('${t[0]}')">${I(t[1])}<span>${t[2]}</span></button>`; }).join("");
+  $("#nav").insertAdjacentHTML("afterbegin",modeSwitch()); modeSync();
 }
 function go(t){ location.hash = t; document.body.classList.remove("nav-open"); }
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&document.body.classList.contains("nav-open")) document.body.classList.remove("nav-open"); });
@@ -1972,6 +2026,7 @@ function storyCard(s,i,kind){
 
 const V = {
   home(){
+    if(isSimple()) return V.simplehome();
     const day = Math.floor(Date.now()/864e5), v = D.dhammapada[day % D.dhammapada.length], h=img(T("home")[5]);
     const layout=["big"];
     return `<section class="phero home-hero" id="hreel"><div class="reel"><div class="slot"></div><div class="slot"></div><div class="glint"></div></div><div class="flagband">${"<i></i>".repeat(5)}</div><span class="reel-cap" id="rcapw"><span class="dot"></span><span id="rcap"></span></span><div class="reel-ui"><div class="reel-bars">${RLIST().map((_,i)=>`<i onclick="reelGo(${i})"><b></b></i>`).join("")}</div><button class="reel-btn" onclick="reelToggle()" aria-label="නවත්වන්න">${I("pause")}</button><button class="reel-btn" onclick="reelGo(RL.i+1)" aria-label="ඊළඟ">${I("next")}</button></div><div class="in">
@@ -1985,6 +2040,16 @@ const V = {
       <div class="bento">${TABS.slice(1).map((t,i)=>{const p=img(t[5]);return `<button class="tile ${layout[i]||""}" style="background-image:url('${p.t}')" onclick="go('${t[0]}')"><div class="bg"></div><span class="go">${I("arrow")}</span><div class="t"><b>${esc(t[2])}</b><span>${esc(t[3])}</span></div></button>`}).join("")}</div>
       ${st("ඡායාරූප තෝරාගැනීම", `<a href="#gallery">සියල්ල බලන්න →</a>`)}
       ${gal([img("ගල් විහාරයේ හිටි"),img("බොරොබුදූර් මහා"),img("ශ්‍රී පාදය"),img("වජ්‍රාසනය"),img("අවුකන බුද්ධ ප්‍රතිමාව"),img("පිළියන්දල")])}`;
+  },
+  simplehome(){
+    const day=Math.floor(Date.now()/864e5), v=D.dhammapada[day%D.dhammapada.length];
+    const big=[["life","sun","බුදු සිරිත"],["jataka","book","ජාතක කතා"],["bana","msg","බණ කතා"],["pirith","scroll","පිරිත්"],["gatha","flame","වන්දනා ගාථා"],["dhammapada","quote","ධම්මපදය"],["meditate","lotus","භාවනාව"],["poya","full","පොහොය දින"]];
+    return `<section class="s-hello"><img src="brand/mark-256.png" alt=""><div><h1>ධර්ම දීපය</h1><p>ඔබට අවශ්‍ය කොටස ඔබන්න</p></div></section>
+      <div class="s-grid">${big.map(b=>`<button class="s-tile" onclick="go('${b[0]}')">${I(b[1])}<b>${b[2]}</b></button>`).join("")}</div>
+      <section class="s-card"><div class="eyebrow">අද දිනයේ ගාථාව</div><div class="pali">${esc(v.p)}</div><div class="meaning">${esc(v.s)}</div></section>
+      ${poyaCard()}
+      <div id="results"></div>
+      <section class="s-card s-mode"><b>සියලු කොටස් අවශ්‍යද?</b><p>බණ රීල්ස්, සිතියම, ඡායාරූප, වීඩියෝ සහ තවත් බොහෝ දේ සම්පූර්ණ ක්‍රමයේ ඇත.</p>${modeSwitch()}</section>`;
   },
   life(){ return hero("life")+st("ජීවන කාල රේඛාව", D.life.length+" සිදුවීම්")+`<div class="tl">${D.life.map((e,i)=>`<div class="card ${M.life[i]?"":"no-img"}"><div><span class="tag">${esc(e.y)}</span><h3>${esc(e.t)}</h3><div>${esc(e.d)}</div></div>${gal(M.life[i])}</div>`).join("")}</div>`+st("බුදුරජාණන් වහන්සේ වැඩ සිටි පූජනීය භූමි", X.life.length+" ඡායාරූප")+gal(X.life); },
   history(){ return hero("history")+st("ඓතිහාසික සිදුවීම්")+`<div class="tl">${D.history.map((e,i)=>`<div class="card ${M.history[i]?"":"no-img"}"><div><span class="tag">${esc(e.y)}</span><h3>${esc(e.t)}</h3><div>${esc(e.d)}</div></div>${gal(M.history[i])}</div>`).join("")}</div>`+st("වීඩියෝ")+`<div class="vgrid">${cVid(M.videos[0])}${cVid(M.videos[1])}</div>`; },
@@ -2114,7 +2179,7 @@ function reveal(){
   document.querySelectorAll("#app details").forEach(d=>{ const sm=d.querySelector("summary"); sm.addEventListener("click",ev=>{ if(d.open && !RM){ ev.preventDefault(); d.classList.add("closing"); setTimeout(()=>{ d.open=false; d.classList.remove("closing"); },230);} }); });
 }
 function moveInd(){
-  const m=$("#nav"), on=m.querySelector("button.on"); let ind=m.querySelector(".ind");
+  const m=$("#nav"), on=m.querySelector("button[data-t].on"); let ind=m.querySelector(".ind");
   if(!ind){ ind=document.createElement("div"); ind.className="ind"; m.prepend(ind); }
   if(!on){ ind.style.opacity=0; return; }
   ind.style.opacity=1; ind.style.top=on.offsetTop+"px"; ind.style.height=on.offsetHeight+"px";
@@ -2808,7 +2873,7 @@ function ddLite(h){ if(!DD_LITE||!h) return h; return h.replace(/(thumb\/[0-9a-f
 function render(keep){
   const t = (location.hash||"#home").slice(1);
   const draw=()=>{ REG.length=0; $("#app").innerHTML = ddLite((t.startsWith("pr-")?()=>V.pread(t.slice(3)):t.startsWith("jk-")?()=>V.jread(t.slice(3)):t.startsWith("mk-")?()=>V.mread(t.slice(3)):(V[t]||V.home))()); if(!keep) window.scrollTo({top:0,behavior:"instant"}); reveal(); fx(); reelInit(); reelsInit(); if(!window.__pc){ window.__pc=1; setTimeout(()=>poyaCheck(false),1500); }
-    document.querySelectorAll(".menu button").forEach(b=>b.classList.toggle("on",b.dataset.t===t)); moveInd(); };
+    document.querySelectorAll(".menu button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===t)); modeSync(); moveInd(); };
   if(keep) draw(); else swapPage(draw);
 }
 
