@@ -1519,6 +1519,9 @@ body.simple .pr-opts input{width:22px;height:22px}
 .s-card .pali{font-size:22px;color:var(--gold);margin:8px 0;line-height:1.8;white-space:pre-line}
 .s-card .meaning{font-size:19px}
 .s-card p{margin:6px 0 0;color:var(--muted)}
+
+html.tr-busy::after{content:"";position:fixed;left:0;right:0;top:0;height:3px;z-index:999;background:linear-gradient(90deg,transparent,var(--gold),transparent);background-size:200% 100%;animation:trbar 1s linear infinite}
+@keyframes trbar{from{background-position:200% 0}to{background-position:-200% 0}}
 </style>
 </head>
 <body class="dark">
@@ -1526,10 +1529,7 @@ body.simple .pr-opts input{width:22px;height:22px}
 <aside class="side" id="side">
   <div class="brand"><div class="mark"><img src="brand/mark-256.png" alt="ධර්ම දීපය ලාංඡනය" width="44" height="44"></div><div><b>ධර්ම දීපය</b><small>Dharma Deepaya</small></div><button class="chip close" onclick="document.body.classList.remove('nav-open')" aria-label="වසන්න"><svg class="ico"><use href="#i-x"/></svg></button></div>
   <nav class="menu" id="nav"></nav>
-  <div class="side-foot">
-    <button class="chip notranslate" translate="no" onclick="go('translate')" title="Translate">🌐 <span id="trCurLbl">සිං</span></button>
-  </div>
-</aside>
+  </aside>
 <div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
 <div id="prog"></div>
 <div id="halo"></div>
@@ -1537,9 +1537,6 @@ body.simple .pr-opts input{width:22px;height:22px}
   <header class="top">
     <button class="chip burger" onclick="document.body.classList.add('nav-open')" aria-label="මෙනුව"><svg class="ico"><use href="#i-menu"/></svg></button>
     <label class="searchbox"><svg class="ico"><use href="#i-search"/></svg><input id="q" placeholder="සොයන්න…" oninput="doSearch(this.value)"></label>
-    <button class="chip inst-btn" id="instTop" onclick="ddInstall()" title="යෙදුම ස්ථාපනය කරන්න" style="display:none">⬇<span class="label">ඇප් එක</span></button>
-    <button class="chip thm-btn" onclick="go('themes')" title="තේමා · Themes" aria-label="තේමා"><svg class="ico"><use href="#i-palette"/></svg></button>
-    <button class="chip" onclick="go('gallery')" title="ඡායාරූප"><svg class="ico"><use href="#i-image"/></svg><span class="label">ඡායාරූප</span></button>
   </header>
   <main id="app"></main>
 </div>
@@ -1948,7 +1945,8 @@ const D = window.DATA, M = window.MEDIA, X = M.extra;
 const I = (n,c="ico") => `<svg class="${c}"><use href="#i-${n}"/></svg>`;
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const ALL = [...X.sl,...X.life,...X.art,...X.people,...X.nature,...Object.values(M.life).flat(),...Object.values(M.history).flat(),...Object.values(M.jataka).flat(),...Object.values(M.bana).flat(),...M.jgal,...M.places,...M.poya,...M.meditate];
+const XNEW=[{"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Gangaramaya_Navam_Maha_Perahera_2567_flags.jpg/960px-Gangaramaya_Navam_Maha_Perahera_2567_flags.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Gangaramaya_Navam_Maha_Perahera_2567_flags.jpg", "c": "ගංගාරාම නවම් පෙරහැර — බෞද්ධ කොඩි"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Kandy_Nawam_Perahera_elephants.jpg/960px-Kandy_Nawam_Perahera_elephants.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Kandy_Nawam_Perahera_elephants.jpg", "c": "නවම් පෙරහැරේ සැරසූ ඇතුන්"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Kelaniya_Temple_overview.jpg/960px-Kelaniya_Temple_overview.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Kelaniya_Temple_overview.jpg", "c": "කැලණි රජ මහා විහාරය"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Sri_Dalada_Maligawa-Devotees_%282%29.jpg/960px-Sri_Dalada_Maligawa-Devotees_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Sri_Dalada_Maligawa-Devotees_(2).jpg", "c": "ශ්‍රී දළදා මාලිගාවේ බැතිමතුන්"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Sri_Lanka_%28iss071e014023%29.jpg/960px-Sri_Lanka_%28iss071e014023%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Sri_Lanka_(iss071e014023).jpg", "c": "අභ්‍යවකාශයෙන් ශ්‍රී ලංකාව"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Vesak_lantern.jpeg/960px-Vesak_lantern.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Vesak_lantern.jpeg", "c": "වෙසක් නෙළුම් කූඩුව"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Lankatilaka-Tempel_2017-10-19_%2812%29.jpg/960px-Lankatilaka-Tempel_2017-10-19_%2812%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Lankatilaka-Tempel_2017-10-19_(12).jpg", "c": "ලංකාතිලක විහාරයේ බුද්ධ ප්‍රතිමාව"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Lights_for_the_Enlightened.jpg/960px-Lights_for_the_Enlightened.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Lights_for_the_Enlightened.jpg", "c": "පහන් පූජාව"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Pagoda_Abhayagiri_vihara.jpg/960px-Pagoda_Abhayagiri_vihara.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Pagoda_Abhayagiri_vihara.jpg", "c": "අභයගිරි දාගැබ — අනුරාධපුරය"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/The_Bodhisatta_reaches_Jhana.-_Kelaniya_Raja_Maha_Viharaya_%28Colombo%29.jpg/960px-The_Bodhisatta_reaches_Jhana.-_Kelaniya_Raja_Maha_Viharaya_%28Colombo%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:The_Bodhisatta_reaches_Jhana.-_Kelaniya_Raja_Maha_Viharaya_(Colombo).jpg", "c": "බෝසතාණන් ධ්‍යාන වැඩීම — කැලණි සිතුවම"}, {"t": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/db/Traditional_Believe.jpg/960px-Traditional_Believe.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", "u": "https://commons.wikimedia.org/wiki/File:Traditional_Believe.jpg", "c": "පහන් දල්වන බැතිමතුන්"}];
+const ALL = [...XNEW,...X.sl,...X.life,...X.art,...X.people,...X.nature,...Object.values(M.life).flat(),...Object.values(M.history).flat(),...Object.values(M.jataka).flat(),...Object.values(M.bana).flat(),...M.jgal,...M.places,...M.poya,...M.meditate];
 const img = k => ALL.find(x=>x.c.includes(k)) || ALL[0];
 const big = u => u.replace(/\/\d+px-/,"/1280px-");
 
@@ -1958,31 +1956,32 @@ const TABS = [
   ["life","sun","බුදු සිරිත","සිදුහත් කුමරුගේ උපතේ සිට පිරිනිවන් පෑම දක්වා","කතා සහ ඉතිහාසය","බුද්ධගයා ශ්‍රී මහා බෝධිය"],
   ["jataka","book","ජාතක කතා","බෝසතාණන් වහන්සේ පාරමිතා පිරූ පෙර ආත්ම කතා","කතා සහ ඉතිහාසය","මහා ජනක ජාතකය — අජන්තා"],
   ["bana","msg","බණ කතා","ධම්මපද අටුවාවේ ප්‍රසිද්ධ කතා","කතා සහ ඉතිහාසය","බුදුරජාණන් වහන්සේ භික්ෂූන්ට දේශනා"],
-  ["monks","monk","ස්වාමීන් වහන්සේලා","ලාංකීය ධර්ම දේශකයන් සහ උන්වහන්සේලාගේ බණ","කතා සහ ඉතිහාසය","බුදුරජාණන් වහන්සේ භික්ෂූන්ට දේශනා"],
-  ["history","landmark","ඉතිහාසය","ශ්‍රී ලංකාවේ බුද්ධ ශාසනයේ වසර 2300ක ගමන","කතා සහ ඉතිහාසය","රුවන්වැලි මහා සෑය"],
+  ["monks","monk","ස්වාමීන් වහන්සේලා","ලාංකීය ධර්ම දේශකයන් සහ උන්වහන්සේලාගේ බණ","කතා සහ ඉතිහාසය","ලංකාතිලක විහාරයේ බුද්ධ ප්‍රතිමාව"],
+  ["history","landmark","ඉතිහාසය","ශ්‍රී ලංකාවේ බුද්ධ ශාසනයේ වසර 2300ක ගමන","කතා සහ ඉතිහාසය","අභයගිරි දාගැබ — අනුරාධපුරය"],
   ["dhamma","wheel","මූලික ධර්මය","චතුරාර්ය සත්‍යය, අෂ්ටාංගික මාර්ගය සහ තවත්","ධර්මය","භාවනා බුද්ධ ප්‍රතිමාව — ගන්ධාර"],
   ["dhammapada","quote","ධම්මපදය","ගාථා සහ සිංහල තේරුම","ධර්මය","පද්මපාණි"],
   ["pirith","scroll","පිරිත් සූත්‍ර","සූත්‍ර 44ක් — පාලි, සිංහල අර්ථය, ආනිසංස සහ ශ්‍රව්‍ය","ධර්මය","ශ්‍රී ලාංකේය භික්ෂූන් වහන්සේලා"],
-  ["gatha","flame","වන්දනා ගාථා","තිසරණය, පන්සිල්, පූජා ගාථා","ධර්මය","ශ්‍රී ලාංකේය භික්ෂූන් වහන්සේලා"],
+  ["gatha","flame","වන්දනා ගාථා","තිසරණය, පන්සිල්, පූජා ගාථා","ධර්මය","පහන් පූජාව"],
   ["meditate","lotus","භාවනාව","ආනාපානසති භාවනාව සහ කාල ගණකය","ධර්මය","අනුරාධපුර සමාධි"],
   ["poya","full","පොහොය දින","පොහොය දින දොළහේ වැදගත්කම","සංස්කෘතිය","ශ්‍රී ලංකාවේ වෙසක්"],
-  ["map","pin","පූජනීය ස්ථාන සිතියම","ස්ථාන 900කට අධික — දුර, ගමන් කාලය සහ මාර්ගය","සංස්කෘතිය","රුවන්වැලි මහා සෑය"],
+  ["map","pin","පූජනීය ස්ථාන සිතියම","ස්ථාන 900කට අධික — දුර, ගමන් කාලය සහ මාර්ගය","සංස්කෘතිය","අභ්‍යවකාශයෙන් ශ්‍රී ලංකාව"],
   ["places","pin","පූජනීය ස්ථාන","අටමස්ථානය සහ ලංකාවේ පූජනීය භූමි","සංස්කෘතිය","ශ්‍රී පාද මුදුනේ හිරු උදාව"],
   ["gallery","image","ඡායාරූප","සැබෑ ඡායාරූප 170","මාධ්‍ය","දඹුලු ලෙන් විහාරයේ පිළිම"],
   ["reels","reels","බණ රීල්ස්","කෙටි බණ වීඩියෝ — ඉහළට ස්ක්‍රෝල් කරන්න","මාධ්‍ය","නුවර වැව සහ දළදා මාලිගාව"],
-  ["videos","play","වීඩියෝ","සැබෑ වීඩියෝ දර්ශන","මාධ්‍ය","නුවර වැව සහ දළදා මාලිගාව"],
+  ["videos","play","වීඩියෝ","සැබෑ වීඩියෝ දර්ශන","මාධ්‍ය","නවම් පෙරහැරේ සැරසූ ඇතුන්"],
   ["quiz","help","ප්‍රශ්න","ඔබේ දැනුම පරීක්ෂා කරන්න","තවත්","දෑගල්දොරුව ජාතක සිතුවම්"],
-  ["fav","star","ප්‍රියතම","ඔබ සුරැකි කතා සහ ගාථා","තවත්","පිපුණු නෙළුම් මල"],
+  ["fav","star","ප්‍රියතම","ඔබ සුරැකි කතා සහ ගාථා","තවත්","වෙසක් නෙළුම් කූඩුව"],
   ["themes","palette","තේමා · Themes","බෞද්ධ සංස්කෘතියෙන් උපන් සන්සුන් වර්ණ — තේමා 12ක්","තවත්","පිපුණු නෙළුම් මල"],
-  ["offline","down","Offline සුරකින්න","ඉන්ටර්නෙට් නැතිවත් — කතා, ඡායාරූප සහ පිරිත් ශ්‍රව්‍ය","තවත්","පිපුණු නෙළුම් මල"],
-  ["install","arrow","ඇප් එක ස්ථාපනය","ධර්ම දීපය ඔබේ දුරකථනයට එක් ක්ලික් එකකින්","තවත්","පිපුණු නෙළුම් මල"],
-  ["translate","lang","පරිවර්තනය · Translate","මුළු යෙදුමම ඕනෑම භාෂාවකට පරිවර්තනය කරන්න","තවත්","පිපුණු නෙළුම් මල"]
+  ["offline","down","Offline සුරකින්න","ඉන්ටර්නෙට් නැතිවත් — කතා, ඡායාරූප සහ පිරිත් ශ්‍රව්‍ය","තවත්","පහන් දල්වන බැතිමතුන්"],
+  ["install","arrow","ඇප් එක ස්ථාපනය","ධර්ම දීපය ඔබේ දුරකථනයට එක් ක්ලික් එකකින්","තවත්","ශ්‍රී දළදා මාලිගාවේ බැතිමතුන්"],
+  ["translate","lang","පරිවර්තනය · Translate","මුළු යෙදුමම ඕනෑම භාෂාවකට පරිවර්තනය කරන්න","තවත්","බෝසතාණන් ධ්‍යාන වැඩීම — කැලණි සිතුවම"]
 ];
 const T = id => TABS.find(t=>t[0]===id);
 
 // gallery + lightbox
 let BOX=[], BI=0; const REG=[];
-function gal(list,cls="gal"){ if(!list||!list.length) return ""; const k=REG.push(list)-1;
+const SEEN=new Set(); const imgKey=u=>{ const m=String(u||"").match(/commons\/(?:thumb\/)?[0-9a-f]\/[0-9a-f]{2}\/([^\/?]+)/); return m?m[1]:String(u||"").replace(/\?.*/,""); };
+function gal(list,cls="gal"){ if(!list||!list.length) return ""; if(cls!=="masonry-all") list=list.filter(x=>{ const k=imgKey(x.t); if(SEEN.has(k)) return false; SEEN.add(k); return true; }); if(!list.length) return ""; const k=REG.push(list)-1;
   return `<div class="${cls}">${list.map((x,i)=>`<figure onclick="openBox(${k},${i})"><img loading="lazy" src="${x.t}" alt="${esc(x.c)}" referrerpolicy="no-referrer"><figcaption>${esc(x.c)}</figcaption></figure>`).join("")}</div>`; }
 function openBox(k,i){ BOX=REG[k]; BI=i; $("#mimg").classList.add("sw"); showBox(); $("#mbox").classList.add("on"); }
 function showBox(){ const x=BOX[BI]; const m=$("#mimg"); const done=()=>{ m.style.setProperty("--dx","0px"); requestAnimationFrame(()=>m.classList.remove("sw")); }; m.onload=done; clearTimeout(window.__bt); window.__bt=setTimeout(done,700); m.onerror=function(){ this.onerror=function(){ this.onerror=null; this.src=x.t; }; this.src=ddLite(x.t); }; m.src=navigator.onLine?big(x.t):ddLite(x.t); $("#mcap").innerHTML=esc(x.c)+`<br><small style="opacity:.6">${BI+1} / ${BOX.length}</small>`; }
@@ -1992,7 +1991,7 @@ let tx0=null; $("#mbox").addEventListener("touchstart",e=>tx0=e.touches[0].clien
 document.addEventListener("keydown",e=>{ if(!$("#mbox").classList.contains("on"))return; if(e.key==="Escape")closeBox(); if(e.key==="ArrowRight")stepBox(1); if(e.key==="ArrowLeft")stepBox(-1); });
 const cVid=v=>`<div class="vid"><video controls preload="none" playsinline poster="${v.poster}"><source src="${v.webm}" type="video/webm">${v.mov?`<source src="${v.mov}" type="video/mp4">`:""}</video><div>${esc(v.c)}</div></div>`;
 
-function hero(id,extra=""){ const t=T(id), p=img(t[5]);
+function hero(id,extra=""){ const t=T(id), p=img(t[5]); SEEN.add(imgKey(p.t));
   return `<section class="phero" style="background-image:url('${big(p.t)}')"><span class="cap">${esc(p.c)}</span><div class="in"><div class="eyebrow">${esc(t[4])}</div><h1>${esc(t[2])}</h1><p>${esc(t[3])}</p>${extra}</div></section>`; }
 const st = (h,s="") => `<div class="sec-title"><h2>${h}</h2>${s?`<span>${s}</span>`:""}</div>`;
 
@@ -2010,17 +2009,20 @@ const modeSwitch=()=>{ const sm=isSimple(); return `<div class="mode-sw" role="g
 function nav(){
   if(isSimple()){ $("#nav").innerHTML = modeSwitch()+TABS.filter(t=>SIMPLE_TABS.includes(t[0])).map(t=>`<button data-t="${t[0]}" onclick="go('${t[0]}')">${I(t[1])}<span>${t[2]}</span></button>`).join(""); modeSync(); return; }
   let g=""; $("#nav").innerHTML = TABS.map(t=>{ const head = t[4]!==g ? `<div class="grp">${(g=t[4])}</div>` : ""; return head+`<button data-t="${t[0]}" onclick="go('${t[0]}')">${I(t[1])}<span>${t[2]}</span></button>`; }).join("");
-  $("#nav").insertAdjacentHTML("afterbegin",modeSwitch()); modeSync();
+  $("#nav").insertAdjacentHTML("afterbegin",modeSwitch()); modeSync(); if(window.trLabel) trLabel();
 }
 function go(t){ location.hash = t; document.body.classList.remove("nav-open"); }
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&document.body.classList.contains("nav-open")) document.body.classList.remove("nav-open"); });
 window.onhashchange = ()=>render();
 
 function storyCard(s,i,kind){
-  const id=kind+i, pics=(kind==='j'?M.jataka:M.bana)[i]||[];
-  const th = pics[0]?`<div class="thumb" style="background-image:url('${pics[0].t}')"></div>`:"";
+  const id=kind+i, all=(kind==='j'?M.jataka:M.bana)[i]||[];
+  // thumbnail: first photo not already used on this page (e.g. the page banner); the opened story shows the remaining photos
+  const ti=all.findIndex(x=>!SEEN.has(imgKey(x.t))), tp=ti>=0?all[ti]:null; if(tp) SEEN.add(imgKey(tp.t));
+  const pics=all.filter(x=>x!==tp&&!SEEN.has(imgKey(x.t)));
+  const th = tp?`<div class="thumb" style="background-image:url('${tp.t}')"></div>`:"";
   const sub = (s.n?s.n+" · ":"")+s.moral.split(/[—.]/)[0].trim();
-  return `<details class="card story-card" ${i===0&&kind!=='x'?'open':''}><summary class="${pics[0]?"":"nothumb"}">${th}<div><h3>${esc(s.t)}</h3><div class="sub">${esc(sub)}</div></div><div style="display:flex;gap:8px;align-items:center">${favBtn(id)}<span class="chev">${I("down")}</span></div></summary>
+  return `<details class="card story-card" ${i===0&&kind!=='x'?'open':''}><summary class="${tp?"":"nothumb"}">${th}<div><h3>${esc(s.t)}</h3><div class="sub">${esc(sub)}</div></div><div style="display:flex;gap:8px;align-items:center">${favBtn(id)}<span class="chev">${I("down")}</span></div></summary>
   <div class="story-body ${pics.length?"":"solo"}"><div><div class="story">${esc(s.d)}</div><div class="moral"><b>පාඩම —</b> ${esc(s.moral)}</div></div>${pics.length?`<div>${gal(pics)}</div>`:""}</div></details>`;
 }
 
@@ -2032,14 +2034,14 @@ const V = {
     return `<section class="phero home-hero" id="hreel"><div class="reel"><div class="slot"></div><div class="slot"></div><div class="glint"></div></div><div class="flagband">${"<i></i>".repeat(5)}</div><span class="reel-cap" id="rcapw"><span class="dot"></span><span id="rcap"></span></span><div class="reel-ui"><div class="reel-bars">${RLIST().map((_,i)=>`<i onclick="reelGo(${i})"><b></b></i>`).join("")}</div><button class="reel-btn" onclick="reelToggle()" aria-label="නවත්වන්න">${I("pause")}</button><button class="reel-btn" onclick="reelGo(RL.i+1)" aria-label="ඊළඟ">${I("next")}</button></div><div class="in">
       <img class="hlogo" src="brand/mark-256.png" alt=""><div class="eyebrow">බුදු දහම · ඉතිහාසය · ධර්මය</div><h1>ධර්ම දීපය</h1>
       <p>බුදුරජාණන් වහන්සේගේ ජීවිතය, බණ කතා, ලංකා බුද්ධ ශාසන ඉතිහාසය, සචිත්‍ර ජාතක කතා 54ක්, ස්වාමීන් වහන්සේලාගේ බණ, සැබෑ ඡායාරූප සහ කෙටි බණ වීඩියෝ — සියල්ල සිංහලෙන්.</p>
-      <div class="cta"><button class="btn" onclick="go('life')">බුදු සිරිත කියවන්න ${I("arrow")}</button><button class="btn ghost" onclick="go('gallery')">${I("image")} ඡායාරූප</button></div></div></section>
+      <div class="cta"><button class="btn" onclick="go('life')">බුදු සිරිත කියවන්න ${I("arrow")}</button></div></div></section>
       <section class="verse"><div><div class="eyebrow">අද දිනයේ ධම්මපද ගාථාව · ${v.n}</div><div class="pali" style="margin-top:10px">${esc(v.p)}</div></div><div class="meaning">${esc(v.s)}</div></section>
       ${poyaCard()}
       <div id="results"></div>
       ${st("ගවේෂණය කරන්න", (TABS.length-1)+" කොටස්")}
-      <div class="bento">${TABS.slice(1).map((t,i)=>{const p=img(t[5]);return `<button class="tile ${layout[i]||""}" style="background-image:url('${p.t}')" onclick="go('${t[0]}')"><div class="bg"></div><span class="go">${I("arrow")}</span><div class="t"><b>${esc(t[2])}</b><span>${esc(t[3])}</span></div></button>`}).join("")}</div>
+      <div class="bento">${TABS.slice(1).map((t,i)=>{const p=img(t[5]); SEEN.add(imgKey(p.t));return `<button class="tile ${layout[i]||""}" style="background-image:url('${p.t}')" onclick="go('${t[0]}')"><div class="bg"></div><span class="go">${I("arrow")}</span><div class="t"><b>${esc(t[2])}</b><span>${esc(t[3])}</span></div></button>`}).join("")}</div>
       ${st("ඡායාරූප තෝරාගැනීම", `<a href="#gallery">සියල්ල බලන්න →</a>`)}
-      ${gal([img("ගල් විහාරයේ හිටි"),img("බොරොබුදූර් මහා"),img("ශ්‍රී පාදය"),img("වජ්‍රාසනය"),img("අවුකන බුද්ධ ප්‍රතිමාව"),img("පිළියන්දල")])}`;
+      ${gal([img("දෑගල්දොරුව ලෙන් විහාරය"),img("සාංචි උතුරු තොරණ"),img("බුද්ධ පාද — අමරාවතී"),img("අජන්තා බෞද්ධ සිතුවම"),img("ධෝව විහාරය"),img("බොරොබුදූර් කැටයම"),img("කැලණි රජ මහා විහාරය"),img("ගංගාරාම නවම් පෙරහැර")])}`;
   },
   simplehome(){
     const day=Math.floor(Date.now()/864e5), v=D.dhammapada[day%D.dhammapada.length];
@@ -2053,8 +2055,8 @@ const V = {
   },
   life(){ return hero("life")+st("ජීවන කාල රේඛාව", D.life.length+" සිදුවීම්")+`<div class="tl">${D.life.map((e,i)=>`<div class="card ${M.life[i]?"":"no-img"}"><div><span class="tag">${esc(e.y)}</span><h3>${esc(e.t)}</h3><div>${esc(e.d)}</div></div>${gal(M.life[i])}</div>`).join("")}</div>`+st("බුදුරජාණන් වහන්සේ වැඩ සිටි පූජනීය භූමි", X.life.length+" ඡායාරූප")+gal(X.life); },
   history(){ return hero("history")+st("ඓතිහාසික සිදුවීම්")+`<div class="tl">${D.history.map((e,i)=>`<div class="card ${M.history[i]?"":"no-img"}"><div><span class="tag">${esc(e.y)}</span><h3>${esc(e.t)}</h3><div>${esc(e.d)}</div></div>${gal(M.history[i])}</div>`).join("")}</div>`+st("වීඩියෝ")+`<div class="vgrid">${cVid(M.videos[0])}${cVid(M.videos[1])}</div>`; },
-  jataka(){ return hero("jataka")+st("සචිත්‍ර ජාතක කතා", J54.length+" කතා")+`<div class="jfilter"><input placeholder="ජාතක කතාවක් සොයන්න…" oninput="jFilter(this.value)"></div><div class="jgrid" id="jg">${jCards(J54)}</div>`+st("ප්‍රසිද්ධ ජාතක කතා", D.jataka.length+" කතා")+D.jataka.map((s,i)=>storyCard(s,i,"j")).join("")+st("පැරණි ජාතක කැටයම් — බොරොබුදූර්")+gal(M.jgal); },
-  bana(){ return hero("bana")+st("බණ කතා", D.bana.length+" කතා")+D.bana.map((s,i)=>storyCard(s,i,"b")).join(""); },
+  jataka(){ return hero("jataka")+st("සචිත්‍ර ජාතක කතා", J54.length+" කතා")+`<div class="jfilter"><input placeholder="ජාතක කතාවක් සොයන්න…" oninput="jFilter(this.value)"></div><div class="jgrid" id="jg">${jCards(J54)}</div>`+(()=>{ const T54=new Set(J54.map(j=>j.t)); const L=D.jataka.map((s,i)=>[s,i]).filter(([s])=>!T54.has(s.t)); return L.length?st("ප්‍රසිද්ධ ජාතක කතා", L.length+" කතා")+L.map(([s,i])=>storyCard(s,i,"j")).join(""):""; })()+st("පැරණි ජාතක කැටයම් — බොරොබුදූර්")+gal(M.jgal); },
+  bana(){ return hero("bana")+st("ධම්මපද අටුවා කතා", D.bana.length+" කතා")+D.bana.map((s,i)=>storyCard(s,i,"b")).join(""); },
   dhamma(){ return hero("dhamma")+`<div class="cols" style="margin-top:22px">${D.dhamma.map(g=>`<div class="card"><h3>${esc(g.t)}</h3><table>${g.items.map((r,i)=>`<tr><th style="width:42%"><span class="num">${String(i+1).padStart(2,"0")}</span>${esc(r[0])}</th><td class="meaning">${esc(r[1])}</td></tr>`).join("")}</table></div>`).join("")}</div>`; },
   dhammapada(){ return hero("dhammapada")+`<div class="cols" style="margin-top:22px">${D.dhammapada.map(v=>`<div class="card">${favBtn("d"+v.n)}<span class="tag">ගාථා ${v.n}</span><div class="pali">${esc(v.p)}</div><div class="meaning" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">${esc(v.s)}</div></div>`).join("")}</div>`; },
   pirith(){ if(!window.PIRITH){ setTimeout(()=>{ if(location.hash.slice(1)==="pirith") render(true); },300); return hero("pirith")+`<p class="meaning" style="margin-top:22px">පූරණය වෙමින්…</p>`; }
@@ -2097,7 +2099,7 @@ const V = {
   places(){ const P=M.places, Hh=M.history, pick=[[Hh[2][0],Hh[3][0],Hh[1][1],Hh[6][0]],[Hh[5][0]],[Hh[1][0]],[P[0]],[Hh[0][0]],[Hh[0][1]],[P[2]],[P[1]]];
     return hero("places")+`<div style="margin-top:18px"><button class="btn" onclick="go('map')">🗺 සිතියමෙන් ස්ථාන 900+ බලන්න — දුර සහ මාර්ගය සමඟ</button></div>`+st("ප්‍රධාන පූජනීය ස්ථාන")+`<div class="cols">${D.places.map((p,i)=>`<div class="card"><h3>${esc(p[0])}</h3><div class="meaning">${esc(p[1])}</div>${gal(pick[i])}</div>`).join("")}</div>`
     +st("ශ්‍රී ලංකාවේ පූජනීය ස්ථාන", (X.sl.length+3)+" ඡායාරූප")+gal([P[3],P[6],P[7],...X.sl],"masonry")+st("වීඩියෝ")+`<div class="vgrid">${cVid(M.videos[2])}${cVid(M.videos[3])}${cVid(M.videos[7])}</div>`; },
-  meditate(){ return hero("meditate")+`<div class="medi" style="margin-top:22px"><div class="timer-card"><div class="ring" style="background-image:url('${M.meditate[0].t}')"></div>
+  meditate(){ return hero("meditate")+`<div class="medi" style="margin-top:22px"><div class="timer-card"><div class="ring" style="background-image:url('${(()=>{ const r=M.meditate.find(x=>!SEEN.has(imgKey(x.t)))||M.meditate[0]; SEEN.add(imgKey(r.t)); return r.t; })()}')"></div>
     <div class="timer" id="tm">10:00</div><div class="presets">${[5,10,15,20,30].map(m=>`<button onclick="setT(${m})">${m} මිනි.</button>`).join("")}</div>
     <button class="btn" id="tb" onclick="startT()">▶ අරඹන්න</button> <button class="btn alt" onclick="setT(mins)">↺ යළි</button>
     <p style="opacity:.6;font-size:14px;margin-bottom:0">ආරම්භයේදී සහ අවසානයේදී සීනු හඬක් නැගේ</p></div>
@@ -2106,10 +2108,10 @@ const V = {
     <li>දිගු හුස්මක් නම් 'දිගු' ලෙසත්, කෙටි නම් 'කෙටි' ලෙසත් දැනගන්න.</li><li>සිත වෙනත් දෙයකට ගිය විට, ඉවසීමෙන් යළි හුස්ම වෙත ගෙන එන්න.</li>
     <li>අවසානයේ සියලු සතුන්ට මෛත්‍රිය පතා, පින් අනුමෝදන් කරන්න.</li></ol></div></div>`
     +st("සන්සුන් දර්ශන")+gal([...M.meditate,...X.nature])+st("වීඩියෝ")+`<div class="vgrid">${cVid(M.videos[6])}</div>`; },
-  videos(){ return hero("videos")+st("සැබෑ වීඩියෝ දර්ශන", M.videos.length+" වීඩියෝ")+`<div class="vgrid">${M.videos.map(cVid).join("")}</div>`; },
+  videos(){ return hero("videos")+st("පූජනීය ස්ථාන සහ උත්සව", M.videos.length+" වීඩියෝ")+`<div class="vgrid">${M.videos.map(cVid).join("")}</div>`; },
   gallery(){
-    const groups=[["all","සියල්ල",ALL],["sl","ශ්‍රී ලංකාව",X.sl],["life","බුද්ධ භූමිය",X.life],["art","කලාව",X.art],["people","භික්ෂූන් සහ උත්සව",X.people],["nature","ස්වභාවය",X.nature],
-      ["story","කතා සහ ඉතිහාසය",ALL.slice(X.sl.length+X.life.length+X.art.length+X.people.length+X.nature.length)]];
+    const groups=[["all","සියල්ල",ALL],["sl","ශ්‍රී ලංකාව",[...XNEW,...X.sl]],["life","බුද්ධ භූමිය",X.life],["art","කලාව",X.art],["people","භික්ෂූන් සහ උත්සව",X.people],["nature","ස්වභාවය",X.nature],
+      ["story","කතා සහ ඉතිහාසය",ALL.slice(XNEW.length+X.sl.length+X.life.length+X.art.length+X.people.length+X.nature.length)]];
     const cur=window.GF||"all", g=groups.find(x=>x[0]===cur);
     return hero("gallery")+`<div class="filters">${groups.map(x=>`<button class="${x[0]===cur?"on":""}" onclick="GF='${x[0]}';render(true);$('#app .masonry').classList.add('swap')">${x[1]} <span class="count">${x[2].length}</span></button>`).join("")}</div>`
       +gal(g[2],"masonry")+`<p class="meaning" style="text-align:center">මුළු ඡායාරූප ${ALL.length}</p>`; },
@@ -2209,7 +2211,7 @@ function fx(){
   // spotlight on cards
   document.querySelectorAll("#app .card,#app .poya").forEach(c=>{ if(!c.querySelector(":scope>.spot")){ const sp=document.createElement("i"); sp.className="spot"; c.prepend(sp);} });
   // hero paragraph word reveal
-  document.querySelectorAll("#app .phero p").forEach(p=>{ if(p.dataset.w) return; p.dataset.w=1; p.innerHTML=p.textContent.split(" ").map((w,i)=>`<span class="w" style="animation-delay:${.45+i*.045}s">${esc(w)}</span>`).join(" "); });
+  document.querySelectorAll("#app .phero p").forEach(p=>{ if(p.dataset.w||trCur()!=="si") return; p.dataset.w=1; p.innerHTML=p.textContent.split(" ").map((w,i)=>`<span class="w" style="animation-delay:${.45+i*.045}s">${esc(w)}</span>`).join(" "); });
   // verse lines
   document.querySelectorAll("#app .verse .pali").forEach(v=>{ if(v.dataset.l) return; v.dataset.l=1; v.innerHTML=v.textContent.split("\n").map((l,i)=>`<span class="ln" style="animation-delay:${.3+i*.18}s">${esc(l)}</span>`).join(""); v.style.whiteSpace="normal"; });
   // count-up numbers in section headers & filters
@@ -2535,7 +2537,9 @@ V.reels = () => {
     }
     if (REELS.length) localStorage.setItem("dd_last_first_reel", REELS[0].id);
   }
-  return `<div class="rfeed" id="rfeed">${REELS.map((r,i)=>`<section class="ritem" data-i="${i}"><div class="rcard${r.provider === "youtube" ? " r-youtube" : ""}" id="rc${i}">
+  return `<div class="rfeed" id="rfeed">${REELS.map((r,i)=>`<section class="ritem" data-i="${i}">${i<3?rCardHTML(r,i):""}</section>`).join("")}</div><div class="rnav"><button onclick="rStep(-1)" aria-label="පෙර">${I("up")}</button><button onclick="rStep(1)" aria-label="ඊළඟ">${I("up")}</button></div>`; };
+// one reel card — built only when it gets near the screen (324 full cards at once froze slow phones ~1.5 s)
+function rCardHTML(r,i){ return `<div class="rcard${r.provider === "youtube" ? " r-youtube" : ""}" id="rc${i}">
   ${r.provider === "youtube" ? `<img class="rposter" src="https://i.ytimg.com/vi/${r.id}/hqdefault.jpg" alt="" loading="${i<3?"eager":"lazy"}" decoding="async">` : ""}<div class="rv"></div><div class="rtop"></div><div class="shade"></div>
   <button class="tap" onclick="rTapAt(${i},event)" aria-label="වාදනය / නවත්වන්න — දෙවරක් තට්ටු කර තත්පර 10 ඉදිරියට/පසුපසට"></button>
   <button class="tapz l" onclick="rTapAt(${i},event)" aria-label="දෙවරක් තට්ටු කර තත්පර 10 පසුපසට"></button><button class="tapz r" onclick="rTapAt(${i},event)" aria-label="දෙවරක් තට්ටු කර තත්පර 10 ඉදිරියට"></button>
@@ -2548,8 +2552,10 @@ V.reels = () => {
    <button onclick="rShare(${i})" aria-label="බෙදාගන්න">${I("share")}</button><small>බෙදන්න</small>
    <a href="${r.url}" target="_blank" rel="noopener" aria-label="මුල් වීඩියෝව">${I("playo")}</a></div>
   <div class="rprog"><b id="rpb${i}"></b></div>${i===0?`<div class="rhint">⌃ ඊළඟ බණ පදයට ඉහළට ස්ක්‍රෝල් කරන්න</div>`:""}
- </div></section>`).join("")}</div><div class="rnav"><button onclick="rStep(-1)" aria-label="පෙර">${I("up")}</button><button onclick="rStep(1)" aria-label="ඊළඟ">${I("up")}</button></div>`; };
-function rStep(d){ const f=$("#rfeed"); if(!f) return; const now=performance.now(); const base=(RS.stepTgt!=null&&now-(RS.stepT||0)<700)?RS.stepTgt:(RS.act<0?0:RS.act); RS.user=RS.stepT=now; const t=Math.max(0,Math.min(REELS.length-1,base+d)); RS.stepTgt=t; f.scrollTo({top:t*f.clientHeight,behavior:"smooth"}); clearTimeout(RS.stepTO); RS.stepTO=setTimeout(()=>{ if($("#rfeed")!==f)return; if(Math.abs(f.scrollTop-t*f.clientHeight)>4) f.scrollTop=t*f.clientHeight; RS.stepTgt=null; rActivate(t); },650); }
+ </div>`; }
+function rEnsure(i){ for(let k=i-2;k<=i+3;k++){ const sec=document.querySelector(`#rfeed .ritem[data-i="${k}"]`); if(sec&&!sec.firstElementChild&&REELS[k]) sec.innerHTML=rCardHTML(REELS[k],k); } }
+
+function rStep(d){ const f=$("#rfeed"); if(!f) return; const now=performance.now(); const base=(RS.stepTgt!=null&&now-(RS.stepT||0)<700)?RS.stepTgt:(RS.act<0?0:RS.act); RS.user=RS.stepT=now; const t=Math.max(0,Math.min(REELS.length-1,base+d)); RS.stepTgt=t; rEnsure(t); f.scrollTo({top:t*f.clientHeight,behavior:"smooth"}); if(Math.abs(t-(RS.act<0?0:RS.act))>1) rActivate(t); clearTimeout(RS.stepTO); RS.stepTO=setTimeout(()=>{ if($("#rfeed")!==f)return; if(Math.abs(f.scrollTop-t*f.clientHeight)>4) f.scrollTop=t*f.clientHeight; RS.stepTgt=null; rActivate(t); },650); }
 function rLike(i,b){ const id=REELS[i].id; RS.likes=RS.likes.includes(id)?RS.likes.filter(x=>x!==id):[...RS.likes,id]; localStorage.setItem("dd_rlikes",JSON.stringify(RS.likes)); b.classList.toggle("liked"); b.animate([{transform:"scale(1)"},{transform:"scale(1.35)"},{transform:"scale(1)"}],{duration:400}); }
 function rShare(i){ const u=REELS[i].url; if(navigator.share) navigator.share({title:REELS[i].t,url:u}).catch(()=>{}); else { navigator.clipboard&&navigator.clipboard.writeText(u); (window.toast||alert)("සබැඳිය පිටපත් කළා"); } }
 const tiktokOrigin = "https://www.tiktok.com";
@@ -2729,6 +2735,7 @@ document.addEventListener("pointerover", e => { if (e.target.closest?.('[data-t=
 document.addEventListener("touchstart", e => { if (e.target.closest?.('[data-t="reels"],a[href="#reels"]')) rWarm(); }, {passive:true});
 function rPreload(i){
   if (!REELS[i] || REELS[i].provider !== "youtube" || RS.players[i] || !$("#rfeed")) return;
+  rEnsure(i);
   const card = $("#rc" + i); if (!card) return;
   rMakeYouTube(i, card, false);
   // warm the poster after that too
@@ -2736,6 +2743,7 @@ function rPreload(i){
 }
 function rActivate(i){
   if (RS.act === i || !REELS[i]) return;
+  rEnsure(i);
   const card = $("#rc" + i);
   if (!card) return;
   const pre = RS.players[i];
@@ -2850,7 +2858,7 @@ V.mread = id => { const m=MONKS.monks.find(x=>x.id===id)||MONKS.monks[0];
   <div><div class="eyebrow">අතිපූජ්‍ය</div><h1>${esc(m.n)}</h1><div class="en">${esc(m.e)}${m.y?" · "+esc(m.y):""}</div><div class="role">${esc(m.r)}</div>
   <p class="bio">${esc(m.bio)}</p>
   ${m.a.length?st("ශ්‍රව්‍ය දේශනා", m.a.length+" දේශනා")+trackList(m.a,m.n,m.img):`<div class="card"><p style="margin:0">උන්වහන්සේගේ හඬ පටිගත කිරීම් නිදහස් බලපත්‍ර යටතේ සොයාගත නොහැකි විය. උන්වහන්සේගේ ඉතිහාසය <a href="#history">ඉතිහාසය</a> කොටසේ කියවන්න.</p></div>`}
-  ${(m.v||[]).length?st("වීඩියෝ දේශනා", m.v.length+" වීඩියෝ")+`<div class="mvids">${m.v.map(v=>`<div class="vid"><video controls preload="none" playsinline src="${v.u}" poster="monks/${m.img}"></video><div>${esc(v.t)}</div></div>`).join("")}</div>`:""}
+  ${(m.v||[]).length?st("වීඩියෝ දේශනා", m.v.length+" වීඩියෝ")+`<div class="mvids">${m.v.map(v=>`<div class="vid"><video controls preload="metadata" playsinline src="${v.u}#t=3"></video><div>${esc(v.t)}</div></div>`).join("")}</div>`:""}
   ${PLAYER}</div></section>`; };
 
 // ════ jataka 54 ════
@@ -2872,8 +2880,8 @@ const DD_LITE=Math.min(screen.width,screen.height)<760;
 function ddLite(h){ if(!DD_LITE||!h) return h; return h.replace(/(thumb\/[0-9a-f]\/[0-9a-f]{2}\/[^"'\s)]+?\/)(960|1280)px-/g,(m,a,w)=>a+(w==="960"?"500":"960")+"px-"); }
 function render(keep){
   const t = (location.hash||"#home").slice(1);
-  const draw=()=>{ REG.length=0; $("#app").innerHTML = ddLite((t.startsWith("pr-")?()=>V.pread(t.slice(3)):t.startsWith("jk-")?()=>V.jread(t.slice(3)):t.startsWith("mk-")?()=>V.mread(t.slice(3)):(V[t]||V.home))()); if(!keep) window.scrollTo({top:0,behavior:"instant"}); reveal(); fx(); reelInit(); reelsInit(); if(!window.__pc){ window.__pc=1; setTimeout(()=>poyaCheck(false),1500); }
-    document.querySelectorAll(".menu button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===t)); modeSync(); moveInd(); };
+  const draw=()=>{ REG.length=0; SEEN.clear(); $("#app").innerHTML = ddLite((t.startsWith("pr-")?()=>V.pread(t.slice(3)):t.startsWith("jk-")?()=>V.jread(t.slice(3)):t.startsWith("mk-")?()=>V.mread(t.slice(3)):(V[t]||V.home))()); if(!keep) window.scrollTo({top:0,behavior:"instant"}); reveal(); fx(); reelInit(); reelsInit(); if(!window.__pc){ window.__pc=1; setTimeout(()=>poyaCheck(false),1500); }
+    document.querySelectorAll(".menu button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===t)); modeSync(); moveInd(); trRefresh(); };
   if(keep) draw(); else swapPage(draw);
 }
 
@@ -2950,24 +2958,62 @@ function setTheme(id){ const t=THEMES.find(x=>x.id===id)||THEMES[0];
   document.querySelectorAll(".thm").forEach(b=>b.classList.toggle("on",b.dataset.id===t.id));
   (window.toast||(()=>{}))(t.si+" තේමාව යොදන ලදී"); }
 (function(){ const t=THEMES.find(x=>x.id===(localStorage.getItem("dd_theme")||"gold")); const m=document.querySelector('meta[name="theme-color"]'); if(t&&m) m.content=t.bg; })();
-function trCur(){ const m=document.cookie.match(/googtrans=\/[^\/]+\/([^;]+)/); return m?decodeURIComponent(m[1]):"si"; }
-function trCookie(v){ const exp=v?"":";expires=Thu, 01 Jan 1970 00:00:00 GMT"; const h=location.hostname, parts=h.split(".");
-  const doms=["",h,"."+h]; if(parts.length>2) doms.push("."+parts.slice(-2).join("."), "."+parts.slice(-3).join("."));
-  doms.forEach(d=>document.cookie="googtrans="+(v||"")+";path=/"+(d?";domain="+d:"")+exp); }
-function trLabel(){ const l=document.getElementById("trCurLbl"); if(l){ const c=trCur(); l.textContent=c==="si"?"සිං":c.toUpperCase(); } }
+// ════ Translation — our own translator (Google's widget can't follow pages that are redrawn) ════
+// Translates every Sinhala text on screen, and any new text as pages/toasts appear. Pali stays as written.
+// Fixed names / Buddhist terms — machine translation gets these wrong
+const TR_GLOSS={
+ en:{"ධර්ම දීපය":"Dharma Deepaya","බුදු සිරිත":"Life of the Buddha","ජාතක කතා":"Jataka Tales","බණ කතා":"Dhamma Stories","පිරිත් සූත්‍ර":"Pirith Suttas","පිරිත්":"Pirith","වන්දනා ගාථා":"Worship Verses","ධම්මපදය":"Dhammapada","භාවනාව":"Meditation","පොහොය දින":"Poya Days","මූලික ධර්මය":"Basic Dhamma","ස්වාමීන් වහන්සේලා":"Venerable Monks","ඉතිහාසය":"History","පූජනීය ස්ථාන සිතියම":"Sacred Places Map","පූජනීය ස්ථාන":"Sacred Places","ඡායාරූප":"Photos","බණ රීල්ස්":"Dhamma Reels","වීඩියෝ":"Videos","ප්‍රශ්න":"Quiz","ප්‍රියතම":"Favourites","මුල් පිටුව":"Home","ආරක්ෂාව":"Protection","සුවය":"Healing","ආශිර්වාද":"Blessings","මූලික":"Basic","භාවනා":"Meditation","ප්‍රධාන පිරිත්":"Main Pirith","සියල්ල":"All","සරණාගමනං":"Saranagamana (Going for Refuge)","ආනිසංස":"Benefits","සරල":"Simple","සම්පූර්ණ":"Full","සොයන්න…":"Search…","ඇප් එක":"Get app","ස්වාමීන් වහන්සේලාගේ බණ":"Sermons by monks","සැබෑ ඡායාරූප 170":"170 real photos","බෝසතාණෝ":"Bodhisatta","කතා සහ ඉතිහාසය":"Stories & History","ධර්මය":"Dhamma","සංස්කෘතිය":"Culture","මාධ්‍ය":"Media","තවත්":"More","ආරම්භය":"Start"},
+ ta:{"ධර්ම දීපය":"தர்ம தீபம்","බුදු සිරිත":"புத்தரின் வாழ்க்கை","පිරිත් සූත්‍ර":"பிரித் சூத்திரங்கள்","පොහොය දින":"போயா தினங்கள்","ධම්මපදය":"தம்மபதம்"},
+ hi:{"ධර්ම දීපය":"धर्म दीपय","බුදු සිරිත":"बुद्ध का जीवन","ධම්මපදය":"धम्मपद"}
+};
+const TR_KEY="AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520";
+const SI_RE=/[\u0D80-\u0DFF]/;
+const TR={lang:"si",cache:{},done:new WeakSet(),orig:new WeakMap(),q:new Set(),attrQ:[],timer:null,busy:0,failed:false,obs:null};
+function trCur(){ return localStorage.getItem("dd_lang")||"si"; }
+function trCookie(){ /* clear any old Google-widget cookie */ const h=location.hostname, parts=h.split("."); const doms=["",h,"."+h]; if(parts.length>2) doms.push("."+parts.slice(-2).join(".")); doms.forEach(d=>document.cookie="googtrans=;path=/"+(d?";domain="+d:"")+";expires=Thu, 01 Jan 1970 00:00:00 GMT"); }
+function trLabel(){ const c=trCur(); const b=document.querySelector('#nav button[data-t="translate"] span'); if(b){ b.classList.add("notranslate"); b.textContent="පරිවර්තනය · Translate"+(c==="si"?"":" ("+c.split("-")[0].toUpperCase()+")"); } }
+function trSkip(el){ return !el||el.closest("script,style,noscript,textarea,code,.notranslate,[translate=no],.pali,.pr-line .p,.leaflet-tile-pane"); }
+function trLoadCache(c){ try{ TR.cache=JSON.parse(localStorage.getItem("dd_tr2_"+c)||"{}"); }catch(e){ TR.cache={}; } Object.assign(TR.cache,TR_GLOSS[c.split("-")[0]]||{},TR_GLOSS[c]||{}); }
+let __trSave=null; function trSaveCache(){ clearTimeout(__trSave); __trSave=setTimeout(()=>{ try{ localStorage.setItem("dd_tr2_"+TR.lang,JSON.stringify(TR.cache)); }catch(e){ /* storage full: keep the newest half */ const k=Object.keys(TR.cache); k.slice(0,k.length/2|0).forEach(x=>delete TR.cache[x]); try{ localStorage.setItem("dd_tr2_"+TR.lang,JSON.stringify(TR.cache)); }catch(e2){} } },800); }
+const trEsc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const __trDec=document.createElement("textarea"); const trUnesc=h=>{ __trDec.innerHTML=h; return __trDec.value; };
+async function trFetch(list,lang){
+  try{ const r=await fetch("https://translate-pa.googleapis.com/v1/translateHtml",{method:"POST",headers:{"Content-Type":"application/json+protobuf","X-Goog-API-Key":TR_KEY},body:JSON.stringify([[list.map(trEsc),"si",lang],"te"])});
+    if(!r.ok) throw new Error(r.status); const j=await r.json(); return (j[0]||[]).map(trUnesc);
+  }catch(e){ // fallback: public endpoint, one string at a time
+    const out=[]; for(const t of list){ try{ const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=si&tl="+lang+"&dt=t&q="+encodeURIComponent(t)); const j=await r.json(); out.push((j[0]||[]).map(x=>x[0]).join("")); }catch(e2){ out.push(null); } } return out; } }
+function trApplyNode(n){ const raw=TR.orig.get(n)??n.nodeValue; const key=raw.trim(); const tr=TR.cache[key]; if(tr==null) return false;
+  if(!TR.orig.has(n)) TR.orig.set(n,raw); const lead=raw.match(/^\s*/)[0], tail=raw.match(/\s*$/)[0]; n.nodeValue=lead+tr+tail; TR.done.add(n); return true; }
+function trCollect(root){ if(TR.lang==="si"||!root) return; const el=root.nodeType===1?root:root.parentElement; if(!el||trSkip(el)&&root.nodeType!==3) { if(root.nodeType===3&&root.parentElement&&!trSkip(root.parentElement)) {} else return; }
+  const walk=root.nodeType===3?[root]:(()=>{ const a=[]; const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:t=>SI_RE.test(t.nodeValue)&&!trSkip(t.parentElement)?1:2}); let x; while((x=w.nextNode())) a.push(x); return a; })();
+  for(const n of walk){ if(TR.done.has(n)||!SI_RE.test(n.nodeValue)) continue; if(!trApplyNode(n)) TR.q.add(n); }
+  if(root.nodeType===1) root.querySelectorAll("[placeholder],[title],[aria-label]").forEach(e=>{ if(trSkip(e)) return; ["placeholder","title","aria-label"].forEach(a=>{ const v=e.getAttribute(a); if(v&&SI_RE.test(v)){ const k=v.trim(); if(TR.cache[k]!=null){ e.setAttribute(a,TR.cache[k]); } else TR.attrQ.push([e,a,k]); } }); });
+  trKick(); }
+function trKick(){ clearTimeout(TR.timer); TR.timer=setTimeout(trFlush,60); }
+async function trFlush(){
+  if(TR.lang==="si") return; const lang=TR.lang;
+  const nodes=[...TR.q].filter(n=>n.isConnected); TR.q.clear(); const attrs=TR.attrQ.splice(0);
+  const need=[...new Set([...nodes.map(n=>(TR.orig.get(n)??n.nodeValue).trim()),...attrs.map(a=>a[2])])].filter(k=>k&&TR.cache[k]==null);
+  if(need.length){ document.documentElement.classList.add("tr-busy");
+    const batches=[]; let b=[],len=0; for(const k of need){ if(b.length&&(len+k.length>3500||b.length>=80)){ batches.push(b); b=[]; len=0; } b.push(k); len+=k.length; } if(b.length) batches.push(b);
+    let fails=0; await Promise.all(batches.map(async bt=>{ const out=await trFetch(bt,lang); bt.forEach((k,i)=>{ if(out[i]) TR.cache[k]=out[i]; else fails++; }); }));
+    document.documentElement.classList.remove("tr-busy");
+    if(TR.lang!==lang) return; trSaveCache();
+    if(fails&&!TR.failed){ TR.failed=true; (window.toast||(()=>{}))(navigator.onLine?"සමහර කොටස් පරිවර්තනය කළ නොහැකි විය":"📴 පරිවර්තනයට ඉන්ටර්නෙට් අවශ්‍යයි"); setTimeout(()=>TR.failed=false,15000); } }
+  nodes.forEach(n=>{ if(n.isConnected) trApplyNode(n); });
+  attrs.forEach(([e,a,k])=>{ if(TR.cache[k]!=null) e.setAttribute(a,TR.cache[k]); }); }
+function trStart(c){ TR.lang=c; trLoadCache(c); document.documentElement.lang=c; trCollect(document.body);
+  if(!TR.obs){ TR.obs=new MutationObserver(ms=>{ if(TR.lang==="si") return; for(const m of ms){ if(m.type==="characterData"){ const n=m.target; if(!TR.done.has(n)&&SI_RE.test(n.nodeValue)){ TR.orig.delete(n); trCollect(n); } else if(TR.done.has(n)&&SI_RE.test(n.nodeValue)){ TR.done.delete(n); TR.orig.delete(n); trCollect(n); } continue; } m.addedNodes.forEach(n=>{ if(n.nodeType===3){ if(SI_RE.test(n.nodeValue)&&n.parentElement&&!trSkip(n.parentElement)) trCollect(n); } else if(n.nodeType===1) trCollect(n); }); } });
+    TR.obs.observe(document.body,{childList:true,subtree:true,characterData:true}); } }
 function setLang(c){
-  localStorage.setItem("dd_lang",c);
-  if(c==="si"){ trCookie(null); location.reload(); return; }
-  trCookie("/si/"+c);
-  const sel=document.querySelector(".goog-te-combo");
-  if(sel){ sel.value=c; sel.dispatchEvent(new Event("change")); }
-  else { location.reload(); return; }
+  const prev=trCur(); localStorage.setItem("dd_lang",c); trCookie();
+  if(c==="si"||(prev!=="si"&&prev!==c)){ location.reload(); return; }   // back to Sinhala / change language: clean reload
   document.querySelectorAll(".tr-l").forEach(b=>b.classList.toggle("on",b.getAttribute("onclick").includes("'"+c+"'")));
-  trLabel(); (window.toast||(()=>{}))("Translating… / පරිවර්තනය වෙමින්");
-}
+  trLabel(); (window.toast||(()=>{}))("Translating… / පරිවර්තනය වෙමින්"); trStart(c); }
+function trRefresh(){ /* handled by the MutationObserver */ }
+function trProtect(){}
 function trFilter(q){ q=q.toLowerCase().trim(); document.querySelectorAll(".tr-l").forEach(b=>b.style.display=!q||b.dataset.s.includes(q)?"":"none"); }
-function gteInit(){ new google.translate.TranslateElement({pageLanguage:"si",autoDisplay:false},"gte"); }
-(function(){ trLabel(); const sc=document.createElement("script"); sc.src="https://translate.google.com/translate_a/element.js?cb=gteInit"; sc.async=true; document.body.appendChild(sc); })();
+(function(){ trCookie(); trLabel(); const c=trCur(); if(c!=="si"){ if(document.readyState==="loading") addEventListener("DOMContentLoaded",()=>trStart(c)); else trStart(c); } })();
 </script>
 <div class="inst-bar" id="instBar"><img src="brand/logo-192.png" alt=""><div class="tx"><b>ධර්ම දීපය ඇප් එක</b>එක් ක්ලික් එකකින් ඔබේ දුරකථනයට ස්ථාපනය කරන්න — ඉන්ටර්නෙට් නැතිවත් විවෘත වේ.</div><button class="btn" onclick="ddInstall()">⬇ ස්ථාපනය</button><button class="x" onclick="ddInstHide(1)" aria-label="වසන්න">×</button></div>
 <script>
