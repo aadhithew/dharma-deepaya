@@ -1,5 +1,5 @@
 // අසපුව — offline support
-const V="dd-v11";
+const V="dd-v12";
 const CORE=["./","index.html","manifest.json","data.js","media.js","jataka54.js","monks.js","reels.js","pirith.js","places.js","brand/logo-192.png","brand/logo-512.png","brand/mark-256.png","favicon.ico"];
 const KEEP=[V,"dd-offline"];   // "dd-offline" = files the user saved with the Offline button
 self.addEventListener("install",e=>{ e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())); });
